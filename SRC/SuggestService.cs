@@ -11,10 +11,10 @@ namespace SRC
         private SuggestRepository suggetRepository;
         private UserRepository userRepository;
         private Suggest suggest;
-        public SuggestService()
+        public SuggestService(UserRepository userrepository,SuggestRepository suggestrepository)
         {
-            suggetRepository = new SuggestRepository();
-            userRepository = new UserRepository();
+            suggetRepository = suggestrepository;
+            userRepository = userrepository;
             suggest = new Suggest();
         }
 

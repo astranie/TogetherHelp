@@ -8,11 +8,11 @@ namespace BLL.Repository
 {
     public class RepositoryBase<T> where T : Entity
     {
-        private SqlContext sqlContext;
-        public RepositoryBase()
+        private DbContext sqlContext;
+        public RepositoryBase(DbContext context)
         {
-            sqlContext = new SqlContext();
-            entities=sqlContext.Set<T>();//切记  如果DbSet属性不在DBContext里设置，就需要把它显式的进行Set
+            sqlContext = context;
+            entities = sqlContext.Set<T>();//切记  如果DbSet属性不在DBContext里设置，就需要把它显式的进行Set
         }
         public DbSet<T> entities { get; set; }
 

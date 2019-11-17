@@ -13,12 +13,12 @@ namespace UI.Controllers
 {
     public class LogOnController : Controller
     {
-        private UserService userService;
+        private IUserService userService;
         LogViewModel viewModel = null;
 
-        public LogOnController()
+        public LogOnController(IUserService service)
         {
-            userService = new UserService();
+            userService = service;
 
         }
 

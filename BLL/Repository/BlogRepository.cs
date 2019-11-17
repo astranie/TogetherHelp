@@ -5,8 +5,12 @@ using System.Text;
 
 namespace BLL.Repository
 {
-    public class BlogRepository
+    public class BlogRepository : RepositoryBase<Blog>
     {
 
+        public BlogRepository(DbContext context) : base(context)
+        {
+
+        }
     }
 }

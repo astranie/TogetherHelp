@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SRC;
@@ -32,6 +34,7 @@ namespace UI
 
             });
 
+            #region 注册Service层所需服务
             //注册服务 在Controller实现依赖注入
             //services.AddTransient<IUserService, UserService>();
             //services.AddTransient<IEmailService, EmailService>();
@@ -40,7 +43,11 @@ namespace UI
 
             //使用扩展方法封装一类依赖
             services.AddFactualService();
+            #endregion
 
+            services.AddScoped<DbContext, SqlContext>();
+            services.AddScoped<UserRepository, UserRepository>();
+            services.AddScoped<SuggestRepository, SuggestRepository>();
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

@@ -10,10 +10,11 @@ namespace SRC
 {
     public class EmailService : IEmailService
     {
-        private EmaileRepository _emailrepository = new EmaileRepository();
+        private EmaileRepository _emailrepository;
         private Email email;
-        public EmailService()
+        public EmailService(EmaileRepository emailrepository)
         {
+            _emailrepository = emailrepository;
             email = new Email();
         }
 

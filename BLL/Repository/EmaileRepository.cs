@@ -8,13 +8,11 @@ namespace BLL.Repository
 {
     public class EmaileRepository : RepositoryBase<Email>
     {
-
         private Email _email;
-        public EmaileRepository()
+        public EmaileRepository(DbContext context) : base(context)
         {
             _email = new Email();
         }
-
 
         public Email RegisterEmail(string address)
         {
@@ -30,7 +28,7 @@ namespace BLL.Repository
             return entities.Where(e => e.EmailAddress == address).SingleOrDefault();
         }
 
-        private String MakeCode()
+        private string MakeCode()
         {
             string code = new Random().Next().ToString();
             return code;

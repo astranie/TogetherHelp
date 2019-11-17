@@ -8,7 +8,11 @@ namespace BLL.Repository
 {
     public class SuggestRepository:RepositoryBase<Suggest>
     {
-     
+        private UserRepository _userRepository;
+        public SuggestRepository(DbContext context,UserRepository userRepository) : base(context)
+        {
+            _userRepository = userRepository;
+        }
 
         public Suggest Publish(Suggest suggest,int authorid)
         {
@@ -20,7 +24,7 @@ namespace BLL.Repository
             //suggest.Author= context.users.Where(u => u.Id == authorid).SingleOrDefault();
             //suggests.Add(suggest);
             //SaveChanges();
-            suggest.Author = new UserRepository().GetById(authorid.ToString());
+            suggest.Author = _userRepository.GetById(authorid.ToString());
             Save(suggest);
             return suggest;
         }

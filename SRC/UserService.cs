@@ -8,9 +8,14 @@ namespace SRC
 {
     public class UserService : IUserService
     {
-        private UserRepository userRepository = new UserRepository();
-        private User user = new User();
+        private UserRepository userRepository;
+        private User user;
 
+        public UserService(UserRepository userrepository)
+        {
+            userRepository = userrepository;
+            user = new User();
+        }
         public User LogIn(string username, string password)
         {
             user = userRepository.GetByName(username);

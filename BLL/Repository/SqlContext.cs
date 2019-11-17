@@ -11,6 +11,7 @@ namespace BLL.Repository
     //显式将Model 映射到数据库
     public class SqlContext : DbContext
     {
+        //SqlContext通过依赖注入 避免形成冲突  将DBContext视为抽象
 
         public SqlContext(DbContextOptions<SqlContext> options) : base(options)
         {
