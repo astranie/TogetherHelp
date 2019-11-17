@@ -14,9 +14,12 @@ namespace UI.Controllers
     public class SuggestController : Controller
     {
         private ISuggestService suggestService;
-        public SuggestController(ISuggestService suggestservice)
+        private IUserService userService;
+
+        public SuggestController(ISuggestService suggestservice,IUserService userservice)
         {
             suggestService = suggestservice;
+            userService = userservice;
         }
         public IActionResult Index()
         {
@@ -28,10 +31,31 @@ namespace UI.Controllers
         {
             string currentUser = HttpContext.Session.GetString("Username");
             int currentId = JsonConvert.DeserializeObject<LogViewModel>(currentUser).CurrentUserId;
-            suggestService.Publish(model.Title, model.Body, currentId);
+           int id= suggestService.Publish(model.Title, model.Body, currentId).Id;
+            
 
 
-            return View();
+
+            return Redirect("/Suggest/Single?id="+id.ToString());
+        }
+
+        public IActionResult Single()
+        {
+            SingleModel model = new SingleModel();
+            string id = HttpContext.Request.Query["id"];
+            //string currentUser=HttpContext.Session.GetString("Username");
+            //int currentId = JsonConvert.DeserializeObject<LogViewModel>(currentUser).CurrentUserId;
+            if (suggestService.FindBySuggestId(Convert.ToInt32(id)) != null)
+            {
+                model.Title = suggestService.FindBySuggestId(Convert.ToInt32(id)).Title;
+                model.Body = suggestService.FindBySuggestId(Convert.ToInt32(id)).Body;
+
+                return View(model);
+            }
+            else
+            {
+                return View("Index");
+            }
         }
     }
 }

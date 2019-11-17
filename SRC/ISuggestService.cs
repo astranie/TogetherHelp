@@ -8,5 +8,6 @@ namespace SRC
     public interface ISuggestService
     {
         Suggest Publish(string title, string body, int authorId);
+        Suggest FindBySuggestId(int suggetsid);
     }
 }
