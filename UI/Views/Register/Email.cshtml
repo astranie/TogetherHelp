@@ -1,0 +1,27 @@
+﻿
+@model UI.Models.Register.EmailModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @{
+        ViewData["Title"] = "邮箱验证";
+    }
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        <lable>邮箱地址：</lable>
+        <br />
+        @Html.TextBoxFor(m => m.EmailAddress)
+        <span>
+            @Html.ValidationMessageFor(m => m.EmailAddress)
+        </span>
+        <button type="submit">
+            提交
+        </button>
+    }
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿
+
+@model UI.Models.LogOn.LogModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    @{
+        ViewData["Title"] = "登录";
+    }
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        <label>
+            用户名：
+        </label><br />
+        @Html.TextBoxFor(m => m.Username)<br />
+        <span>@Html.ValidationMessageFor(m => m.Username)</span>
+        <label>
+            密码：
+        </label><br />
+        @Html.TextBoxFor(m => m.Password)<br />
+        <span>@Html.ValidationMessageFor(m => m.Password)</span>
+        <label>
+            验证码：
+        </label><br />
+        @Html.TextBoxFor(m => m.Captcha) <img src="/Captcha/Get" /><br />
+        <span>@Html.ValidationMessageFor(m => m.Captcha)</span>
+        <br />
+        <button type="submit">
+            提交
+        </button>
+        <button type="reset">
+            重置
+        </button>
+    }
+</body>
+</html>

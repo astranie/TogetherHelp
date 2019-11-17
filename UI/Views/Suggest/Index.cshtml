@@ -1,0 +1,34 @@
+﻿@model UI.Models.Suggest.IndexModel
+@{
+}
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    @{
+
+        ViewData["Title"] = "意见建议";
+
+    }
+</head>
+@using (Html.BeginForm())
+{
+    <label>
+        标题：
+    </label>
+    <br />
+    @Html.TextBoxFor(m => m.Title)
+    <br />
+    <span>@Html.ValidationMessageFor(m => m.Title)</span>
+
+    <label>
+        内容：
+    </label>
+    <br />
+    @Html.TextAreaFor(m => m.Body)
+    <br />
+    <span>@Html.ValidationMessageFor(m => m.Body)</span>
+    <br />
+    <button type="submit">提交</button>
+    <button type="reset">重置</button>
+
+}

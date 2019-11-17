@@ -1,0 +1,55 @@
+﻿@model UI.Models.LogViewModel
+
+@using Microsoft.AspNetCore.Http;
+@using Newtonsoft.Json;
+@{
+    string jsonUser = Context.Session.GetString("Username");
+    LogViewModel logViewModel = null;
+    if (!string.IsNullOrEmpty(jsonUser))
+    {
+        logViewModel = JsonConvert.DeserializeObject<LogViewModel>(jsonUser);
+    }
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    @if (logViewModel != null)
+    {
+        <h1>你好，@logViewModel.CurrentUsername</h1>
+    }
+    else
+    {
+        <a asp-action="Log" asp-controller="LogOn">登录</a>
+        <a asp-action="Index" asp-controller="Register">注册</a>
+    }
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Register" asp-action="Email">邮箱验证</a></li>
+                    <li><a asp-area="" asp-controller="Suggest" asp-action="Index">意见建议</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2019 - MyProject</p>
+        </footer>
+    </div>
+</body>
+</html>
