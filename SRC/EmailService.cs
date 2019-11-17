@@ -15,7 +15,6 @@ namespace SRC
         public EmailService()
         {
             email = new Email();
-
         }
 
         //为了把数据写在数据库里，需要在改变对象的属性值后保存在数据库里

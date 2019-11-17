@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BLL.Repository
 {
-    public class UserRepository : SqlContext
+    public class UserRepository:RepositoryBase<User>
     {
         //在SqlContext里写好它的构造函数，1无参，2带有一个需要Options的参数
         //在每个Repository里均可调用SqlContext的构造函数来新建一个要使用的DBContext
@@ -23,22 +23,15 @@ namespace BLL.Repository
         //}
 
 
-        public User Save(User user)
-        {
-            users.Add(user);
-            SaveChanges();
-
-            return user;
-        }
 
         public User GetByName(string username)
         {
-            return users.Where(u => u.UserName == username).SingleOrDefault();
+            return entities.Where(u => u.UserName == username).SingleOrDefault();
         }
 
         public User GetById(string id)
         {
-            return users.Where(u => u.Id == Convert.ToInt32(id)).SingleOrDefault();
+            return entities.Where(u => u.Id == Convert.ToInt32(id)).SingleOrDefault();
         }
     }
 }

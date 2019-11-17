@@ -5,15 +5,8 @@ using System.Text;
 
 namespace BLL.Repository
 {
-    public class BlogRepository : SqlContext
+    public class BlogRepository
     {
-        private Blog Blogs;
-        public BlogRepository()
-        {
-            Blogs = new Blog();
-        }
-
-
 
     }
 }

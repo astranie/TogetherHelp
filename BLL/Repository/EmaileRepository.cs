@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BLL.Repository
 {
-    public class EmaileRepository : SqlContext
+    public class EmaileRepository : RepositoryBase<Email>
     {
 
         private Email _email;
@@ -21,14 +21,13 @@ namespace BLL.Repository
             _email.EmailAddress = address;
             _email.ValidateCode = MakeCode();
 
-            emailes.Add(_email);
-            SaveChanges();
+            Save(_email);
             return _email;
         }
         public Email HasExisted(string address)
         {
 
-            return emailes.Where(e => e.EmailAddress == address).SingleOrDefault();
+            return entities.Where(e => e.EmailAddress == address).SingleOrDefault();
         }
 
         private String MakeCode()
@@ -37,21 +36,11 @@ namespace BLL.Repository
             return code;
         }
 
-        public Email GetById(int id)
-        {
-            return emailes.Where(e => e.Id == id).SingleOrDefault();
-        }
+
 
         public Email GetByAddress(string address)
         {
-            return emailes.Where(e => e.EmailAddress == address).SingleOrDefault();
+            return entities.Where(e => e.EmailAddress == address).SingleOrDefault();
         }
-
-        public Email Update()
-        {
-            SaveChanges();
-            return _email;
-        }
-
     }
 }
