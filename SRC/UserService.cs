@@ -46,6 +46,7 @@ namespace SRC
         public User GetById(string id)
         {
             return userRepository.GetById(id);
+            //这样的逻辑应该加上null判断及异常处理
         }
 
         public User HasExisted(string username)

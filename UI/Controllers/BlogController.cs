@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SRC;
 using System;
+using System.Linq;
 using UI.Models;
 using UI.Models.Blogs;
 
@@ -37,39 +38,36 @@ namespace UI.Controllers
         public IActionResult New()
         {
             return View();
-
         }
 
         [HttpPost]
         public IActionResult New(NewModel model)
         {
-            LogViewModel viewModel = new LogViewModel();
-            string user = HttpContext.Session.GetString("Username");
-            viewModel = JsonConvert.DeserializeObject<LogViewModel>(user);
-            int id = blogService.Publish(model.Title, model.Body, viewModel.CurrentUserId.ToString()).Id;
+            //写入整个Controller  利于重用
+            //LogViewModel viewModel = new LogViewModel();
+            //string user = HttpContext.Session.GetString("Username");
+            //viewModel = JsonConvert.DeserializeObject<LogViewModel>(user);
 
+            int id = blogService.Publish(model.Title, model.Body, CurrentUser().CurrentUserId.ToString()).Id;
             return Redirect("/Blog/Single?id=" + id);
         }
 
         public IActionResult Single()
         {
             NewModel model = new NewModel();
-            LogViewModel viewModel = new LogViewModel();
+
             string id = HttpContext.Request.Query["id"];
             if (blogService.GetById(id) != null)
             {
                 model.CreatedTime = blogService.GetById(id).CreatedTime;
                 model.Title = blogService.GetById(id).Title;
                 model.Body = blogService.GetById(id).Body;
-                #region 使用登录状态获取用户名
-                string user = HttpContext.Session.GetString("Username");
-                viewModel = JsonConvert.DeserializeObject<LogViewModel>(user);
-                model.CurrentUsername = viewModel.CurrentUsername;
+                #region 使用登录状态获取用户名，使用级联加载后不再需要
+                //string user = HttpContext.Session.GetString("Username");
+                //viewModel = JsonConvert.DeserializeObject<LogViewModel>(user);
+                //model.CurrentUsername = viewModel.CurrentUsername;
                 #endregion
-
-                //Model内的属性为User，数据库能取到的只是AuthorId，我现在没法直接取到User
                 model.Author = blogService.GetById(id).Author;
-                //model.CurrentUsername = blogService.GetById(id).Author.UserName;
                 //model.Keywords = blogService.GetById(id).Keywords;
                 model.Posts = blogService.GetById(id).Posts;
 
@@ -83,21 +81,18 @@ namespace UI.Controllers
             string page = HttpContext.Request.Query["page"];
             string blogger = HttpContext.Request.Query["blogger"];
 
-
             if (string.IsNullOrEmpty(blogger))
             {
                 if (!string.IsNullOrEmpty(page))
                 {
                     model.Page = Convert.ToInt16(page);
-                    model.Blogs = blogService.Get(model.Page, 4);
-
+                    model.Blogs = blogService.Get(model.Page, 4).ToList();
 
                     return View(model);
                 }
                 else
                 {
-                    model.Blogs = blogService.Get();
-
+                    model.Blogs = blogService.Get().ToList();
                     return View(model);
                 }
             }
@@ -106,23 +101,28 @@ namespace UI.Controllers
                 if (!string.IsNullOrEmpty(page))
                 {
                     model.Page = Convert.ToInt16(page);
-                    model.Blogs = blogService.
-                        Get(blogService.GetByAuthor(userService.GetById(blogger)), model.Page, 4);
+                    try
+                    {
+                        model.Blogs = blogService.
+                                                Get(blogService.GetByAuthor(userService.GetById(blogger)),
+                                                model.Page, 4)
+                                                .ToList();
+                    }
+                    catch (Exception)
+                    {
 
-                    // 级联加载？
+                        throw;
+                    }
+
 
                     return View(model);
                 }
                 else
                 {
-                    model.Blogs = blogService.GetByAuthor(userService.GetById(blogger));
+                    model.Blogs = blogService.GetByAuthor(userService.GetById(blogger)).ToList();
                     return View(model);
                 }
-
             }
-
-
-
         }
 
 
@@ -136,18 +136,19 @@ namespace UI.Controllers
             if (!string.IsNullOrEmpty(page))
             {
                 model.Page = Convert.ToInt16(page);
-                model.Blogs = blogService.Get(blogs, model.Page, 4);
+                model.Blogs = blogService.Get(blogs, model.Page, 4).ToList();
 
                 return View(model);
             }
             else
             {
-                model.Blogs = blogService.Get();
+                model.Blogs = blogs.ToList();
 
                 return View(model);
             }
-
         }
+
+
         public IActionResult MineListPage(int page)
         {
             page = 1;
@@ -174,7 +175,6 @@ namespace UI.Controllers
             }
             else
             {
-
                 return Redirect("/Blog/List");
             }
         }

@@ -17,41 +17,55 @@ namespace BLL.Repository
         }
 
         #region 关于文章显示
-        public IList<Blog> Get() //获取所有Blog 可用于列表显示所有文章
+        //获取所有Blog 可用于列表显示所有文章
+        public IQueryable<Blog> Get()
         {
-            return entities.Include(blog=>blog.Author).
-                ToList();
+            return entities
+                .Include(blog => blog.Author)
+                //.Include(b => b.Posts)
+                //.Include(b => b.KeywordId)
+                ;
         }
-        public IList<Blog> Get(int pageindex, int count) //对所有Blog进行分页显示
+
+        //分页显示某一过滤后的方法，比如某一作者的
+        public IQueryable<Blog> Get(IQueryable<Blog> blogs, int pageindex, int count)
         {
-            return entities.Include(b=>b.Author).
-                Skip((pageindex - 1) * count).Take(count).
-                ToList();
+            return Paged(blogs, pageindex, count);
         }
-        public IList<Blog> GetByAuhtor(User authorid)   //取某一User的Blog
+
+        // 分页方法在基类实现，分页显示所有博客
+        public IQueryable<Blog> Get(int pageindex, int count) //对所有Blog进行分页显示
         {
-            return entities.Where(b => b.Author == authorid).
-                Include(b=>b.Author).
-                ToList();
+            return Paged(entities.Include(b => b.Author), pageindex, count);
+
         }
-        public IList<Blog> Get(IList<Blog> blogs, int pageindex, int count)   //对IList对象进行分页操作
+
+        public IQueryable<Blog> GetByAuhtor(User authorid)   //取某一User的Blogs
         {
-            return blogs.Skip((pageindex - 1) * count).Take(count).ToList();
+            return entities.
+                Include(b => b.Author).
+                Where(b => b.Author == authorid);
         }
+
         #endregion
 
-        public new Blog GetById(int id)
+        //这种覆盖基类方法的设计过于丑陋，将基类方法改为依赖IQueryable，利于子类扩展使用
+        //public new Blog GetById(int id)
+        //{
+        //    return entities.Include(b => b.Author).Where(b => b.Id == id).SingleOrDefault();
+        //}
+
+
+        public new IQueryable<Blog> GetById(int id)
         {
-            return entities.Include(b => b.Author).Where(b => b.Id == id).SingleOrDefault();
+            return entities.Include(b => b.Author).Where(b => b.Id == id);
         }
-
-
 
         public Blog Publish(string title, string body, int authorId)
         {
             blog.Body = body;
             blog.Title = title;
-            blog.Author = userRepository.GetById(authorId);
+            blog.Author = userRepository.GetById(authorId).SingleOrDefault();
             blog.CreatedTime = DateTime.Now;
 
             Save(blog);
@@ -59,7 +73,7 @@ namespace BLL.Repository
             return blog;
         }
 
-        public IQueryable
+
 
     }
 }

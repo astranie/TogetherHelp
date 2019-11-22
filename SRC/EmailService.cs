@@ -5,6 +5,7 @@ using System.Text;
 using BLL;
 using System.Net.Mail;
 using System.Net;
+using System.Linq;
 
 namespace SRC
 {
@@ -40,7 +41,7 @@ namespace SRC
 
         public Email GetById(int id)
         {
-            return _emailrepository.GetById(id);
+            return _emailrepository.GetById(id).SingleOrDefault();
 
         }
 

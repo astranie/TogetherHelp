@@ -3,6 +3,7 @@ using BLL.Repository;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SRC
@@ -32,7 +33,7 @@ namespace SRC
         public Suggest FindBySuggestId(int suggetsid)
         {
 
-            return suggetRepository.GetById(suggetsid);
+            return suggetRepository.GetById(suggetsid).SingleOrDefault();
         }
 
     }

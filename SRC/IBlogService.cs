@@ -1,6 +1,7 @@
 ﻿using BLL;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SRC
@@ -10,8 +11,9 @@ namespace SRC
         Blog Publish(string title, string body, string authorId);
         Blog GetById(string id);
         IList<Blog> Get();
-        IList<Blog> Get(int pageindex,int count);
-        IList<Blog> Get(IList<Blog> blogs,int pageindex, int count);
-        IList<Blog> GetByAuthor(User authorid);
+        IQueryable<Blog> Get(IQueryable<Blog> blogs, int pageindex, int count);
+        IList<Blog> Get(int pageindex, int count);
+
+        IQueryable<Blog> GetByAuthor(User authorid);
     }
 }

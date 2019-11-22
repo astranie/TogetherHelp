@@ -23,9 +23,9 @@ namespace BLL.Repository
             return entity;
         }
 
-        public T GetById(int id)
+        public IQueryable<T> GetById(int id)
         {
-            return entities.Where(entities => entities.Id == id).SingleOrDefault();
+            return entities.Where(entities => entities.Id == id);
         }
 
         public void Update()
@@ -34,9 +34,9 @@ namespace BLL.Repository
         }
 
         //对IList对象进行分页操作，比如文章等
-        public IList<T> Paged(IList<T> targets,int pageindex,int count)
+        public IQueryable<T> Paged(IQueryable<T> targets,int pageindex,int count)
         {
-            return targets.Skip((pageindex - 1) * count).Take(count).ToList();
+            return targets.Skip((pageindex - 1) * count).Take(count);
         }
     
 
