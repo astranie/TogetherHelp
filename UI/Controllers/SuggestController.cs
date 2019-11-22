@@ -9,17 +9,20 @@ using System.Threading.Tasks;
 using UI.Models;
 using UI.Models.Suggest;
 
+
 namespace UI.Controllers
 {
     public class SuggestController : Controller
     {
         private ISuggestService suggestService;
         private IUserService userService;
+        private IHttpContextAccessor _accessor;
 
-        public SuggestController(ISuggestService suggestservice,IUserService userservice)
+        public SuggestController(ISuggestService suggestservice, IUserService userservice,IHttpContextAccessor accessor)
         {
             suggestService = suggestservice;
             userService = userservice;
+            _accessor = accessor;
         }
         public IActionResult Index()
         {
@@ -31,12 +34,12 @@ namespace UI.Controllers
         {
             string currentUser = HttpContext.Session.GetString("Username");
             int currentId = JsonConvert.DeserializeObject<LogViewModel>(currentUser).CurrentUserId;
-           int id= suggestService.Publish(model.Title, model.Body, currentId).Id;
-            
+            int id = suggestService.Publish(model.Title, model.Body, currentId).Id;
+
+            //_accessor.HttpContext 使用依赖注入在Controller里取到HTTPContext
 
 
-
-            return Redirect("/Suggest/Single?id="+id.ToString());
+            return Redirect("/Suggest/Single?id=" + id.ToString());
         }
 
         public IActionResult Single()

@@ -1,0 +1,33 @@
+﻿@model UI.Models.Blogs.NewModel
+@{
+    ViewData["Title"] = "我的文章";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<a>@Html.ActionLink("分页显示", "MineListPage")</a>
+@if (!string.IsNullOrEmpty(Context.Request.Query["page"]))
+{
+    int page = Convert.ToInt32(Context.Request.Query["page"]);
+    page++;
+    <a>@Html.ActionLink("下一页","/List") </a>
+}
+
+
+@foreach (var item in Model.Blogs)
+{
+    <hr />
+    <div>
+        <h3>@item.Title</h3>
+        <span>@item.CreatedTime</span>
+        @*<span>@item.Author.UserName</span>*@
+    </div>
+    <p>@item.Body</p>
+    <hr />
+}
+
+
+
+
+
+

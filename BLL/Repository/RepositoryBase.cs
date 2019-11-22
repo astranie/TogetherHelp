@@ -33,5 +33,12 @@ namespace BLL.Repository
             sqlContext.SaveChanges();
         }
 
+        //对IList对象进行分页操作，比如文章等
+        public IList<T> Paged(IList<T> targets,int pageindex,int count)
+        {
+            return targets.Skip((pageindex - 1) * count).Take(count).ToList();
+        }
+    
+
     }
 }

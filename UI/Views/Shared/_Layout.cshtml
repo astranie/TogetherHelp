@@ -26,6 +26,7 @@
     @if (logViewModel != null)
     {
         <h1>你好，@logViewModel.CurrentUsername</h1>
+        <a asp-action="Mine" asp-controller="Blog">我的文章</a>
     }
     else
     {
@@ -38,6 +39,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Register" asp-action="Email">邮箱验证</a></li>
                     <li><a asp-area="" asp-controller="Suggest" asp-action="Index">意见建议</a></li>
+                    <li><a asp-area="" asp-controller="Blog" asp-action="New">文章发布</a></li>
                 </ul>
             </div>
         </div>

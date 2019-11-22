@@ -14,6 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<ISuggestService, SuggestService>();
             services.AddTransient<IBlogService, BlogService>();
+
         }
 
 

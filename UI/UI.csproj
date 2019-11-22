@@ -15,4 +15,10 @@
     <ProjectReference Include="..\SRC\SRC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Blog\Mine.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>

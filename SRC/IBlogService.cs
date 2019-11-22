@@ -8,5 +8,10 @@ namespace SRC
     public interface IBlogService
     {
         Blog Publish(string title, string body, string authorId);
+        Blog GetById(string id);
+        IList<Blog> Get();
+        IList<Blog> Get(int pageindex,int count);
+        IList<Blog> Get(IList<Blog> blogs,int pageindex, int count);
+        IList<Blog> GetByAuthor(User authorid);
     }
 }

@@ -1,0 +1,27 @@
+﻿@model UI.Models.Blogs.NewModel
+<!DOCTYPE html>
+
+<html>
+@{
+    ViewData["Title"] = "文章发布";
+}
+
+<body>
+
+    @using (Html.BeginForm())
+    {
+        <label>文章题目</label><br />
+        @Html.TextBoxFor(m => m.Title)
+        <br />
+        <br />
+        <label></label>
+        @Html.TextAreaFor(m=>m.Body)<br />
+
+        <label>关键字</label><br />
+        @Html.TextBoxFor(m=>m.Keywords)
+        <br />
+        <button type="submit">发布</button>
+    }
+
+</body>
+</html>

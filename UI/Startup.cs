@@ -48,6 +48,7 @@ namespace UI
             services.AddScoped<DbContext, SqlContext>();
             services.AddScoped<UserRepository, UserRepository>();
             services.AddScoped<SuggestRepository, SuggestRepository>();
+            services.AddScoped<BlogRepository, BlogRepository>();
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
