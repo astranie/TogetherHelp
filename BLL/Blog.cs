@@ -11,11 +11,12 @@ namespace BLL
         public User Author { get; set; }
 
 
-        public IList<Post >Posts { get; set; }
+        public IList<Post> Posts { get; set; }
         public IList<KeywordAndBlog> Keywords { get; set; }
 
         public int KeywordId { get; set; }
-        public int PostId { get; set; }
+        //public int PostId { get; set; }
+
 
 
 

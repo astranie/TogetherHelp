@@ -1,11 +1,32 @@
-﻿@model UI.Models.Blogs.NewModel
-@{}
-
+﻿@model UI.Models.Blogs.SingleModel
 <div>
     <h2>@Model.Title</h2>
-    <span>@Model.CreatedTime</span>
-    <span>@Model.Author.UserName</span>
+    <span>@Model.BlogTime</span>
+    <span>@Model.BlogAuthor</span>
 </div>
 <p>@Model.Body</p>
+
+<h3>Comment</h3>
+@if (Model.Posts != null)
+{
+    @foreach (var item in Model.Posts)
+    {
+        <p>@item.Body</p>
+        <p>@item.CreatedTime</p>
+        <p>@item.Poster.UserName</p>
+        <hr />
+    }
+}
+
+
+
+@using (Html.BeginForm())
+{
+    <label>发表评论</label><br />
+    @Html.TextAreaFor(m => m.Post.Body)
+    <br />
+    <button type="submit">提交</button>
+}
+
 
 

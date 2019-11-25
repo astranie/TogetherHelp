@@ -15,5 +15,8 @@ namespace SRC
         IList<Blog> Get(int pageindex, int count);
 
         IQueryable<Blog> GetByAuthor(User authorid);
+
+
+        Post AddPost(string body, int authorid, Blog blogid);
     }
 }

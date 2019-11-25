@@ -8,6 +8,8 @@ namespace BLL
     {
         public string KeywordContent { get; set; }
         public IList<KeywordAndBlog> Blogs { get; set; }
+
+
         public int BlogId { get; set; }
     }
 }

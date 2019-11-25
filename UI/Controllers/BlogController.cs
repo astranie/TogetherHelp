@@ -15,6 +15,7 @@ namespace UI.Controllers
         private IUserService userService;
         string DUsername = "Username";
 
+        //获取当前登录用户的信息
         public LogViewModel CurrentUser()
         {
 
@@ -54,12 +55,12 @@ namespace UI.Controllers
 
         public IActionResult Single()
         {
-            NewModel model = new NewModel();
+            SingleModel model = new SingleModel();
 
             string id = HttpContext.Request.Query["id"];
             if (blogService.GetById(id) != null)
             {
-                model.CreatedTime = blogService.GetById(id).CreatedTime;
+                model.BlogTime = blogService.GetById(id).CreatedTime;
                 model.Title = blogService.GetById(id).Title;
                 model.Body = blogService.GetById(id).Body;
                 #region 使用登录状态获取用户名，使用级联加载后不再需要
@@ -67,14 +68,36 @@ namespace UI.Controllers
                 //viewModel = JsonConvert.DeserializeObject<LogViewModel>(user);
                 //model.CurrentUsername = viewModel.CurrentUsername;
                 #endregion
-                model.Author = blogService.GetById(id).Author;
+                model.BlogAuthor = blogService.GetById(id).Author.UserName;
                 //model.Keywords = blogService.GetById(id).Keywords;
                 model.Posts = blogService.GetById(id).Posts;
+
 
                 return View(model);
             }
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Single(SingleModel model)
+        {
+            int userid = CurrentUser().CurrentUserId;
+            string content = model.Post.Body;
+            int blogid = Convert.ToInt32(HttpContext.Request.Query["id"]);
+            blogService.AddPost(content, userid, blogService.GetById(blogid.ToString()));
+            //此时的Model返回去好像没了之前取到的Blog的关联User
+            //应该是Model的问题
+            #region 关于传回Model 其他属性为空 解决方式未定
+            model.BlogTime = blogService.GetById(HttpContext.Request.Query["id"]).CreatedTime;
+            model.Title = blogService.GetById(HttpContext.Request.Query["id"]).Title;
+            model.Body = blogService.GetById(HttpContext.Request.Query["id"]).Body;
+            model.BlogAuthor = blogService.GetById(HttpContext.Request.Query["id"]).Author.UserName;
+            model.Posts = blogService.GetById(HttpContext.Request.Query["id"]).Posts;
+            #endregion
+
+            return View(model);
+        }
+
 
         public IActionResult List(NewModel model)
         {
@@ -110,7 +133,6 @@ namespace UI.Controllers
                     }
                     catch (Exception)
                     {
-
                         throw;
                     }
 
@@ -164,6 +186,7 @@ namespace UI.Controllers
 
 
 
+        //下一页的超链接
         public IActionResult Nextpage(int page)
         {
             string currentPage = HttpContext.Request.Query["page"];

@@ -23,24 +23,30 @@ namespace DBFactory
         //归为页面上的事情，所以以页面为单位做Factory
         static void Main(string[] args)
         {
-            string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;
-            Initial Catalog=TogetherHelp;Integrated Security=True;Connect Timeout=30;
-            Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            DbContextOptionsBuilder<SqlContext> optionsBuilder = new DbContextOptionsBuilder<SqlContext>();
-            optionsBuilder.UseSqlServer(connectionString);
-            optionsBuilder.UseLoggerFactory(logger);
+            //string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;
+            //Initial Catalog=TogetherHelp;Integrated Security=True;Connect Timeout=30;
+            //Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            //DbContextOptionsBuilder<SqlContext> optionsBuilder = new DbContextOptionsBuilder<SqlContext>();
+            //optionsBuilder.UseSqlServer(connectionString);
+            //optionsBuilder.UseLoggerFactory(logger);
 
 
-            DatabaseFacade db = new SqlContext().Database;
-            db.EnsureDeleted();
-            //为什么删的是我的数据库？因为SqlContext的连接字符串指定了使用的数据库
-            db.Migrate();
+            //DatabaseFacade db = new SqlContext().Database;
+            //db.EnsureDeleted();
+            ////为什么删的是我的数据库？因为SqlContext的连接字符串指定了使用的数据库
+            //db.Migrate();
 
-            //new RegisterFactory().Create();
-            //new SuggestFactory().Create();
+            ////new RegisterFactory().Create();
+            ////new SuggestFactory().Create();
 
-            Console.WriteLine("Succeed");
-            Console.ReadLine();
+            //Console.WriteLine("Succeed");
+            //Console.ReadLine();
+
+
+            //Console.WriteLine("Please input your name:");
+            //string name = Console.ReadLine();
+            //Console.WriteLine("Hello,"+name);
+            //Console.ReadLine();
 
         }
 

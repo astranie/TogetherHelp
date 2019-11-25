@@ -10,9 +10,11 @@ namespace BLL.Repository
     {
         private Blog blog;
         private UserRepository userRepository;
+        private Post post;
         public BlogRepository(DbContext context, UserRepository repository) : base(context)
         {
             blog = new Blog();
+            post = new Post();
             userRepository = repository;
         }
 
@@ -22,7 +24,7 @@ namespace BLL.Repository
         {
             return entities
                 .Include(blog => blog.Author)
-                //.Include(b => b.Posts)
+                .Include(b => b.Posts)
                 //.Include(b => b.KeywordId)
                 ;
         }
@@ -58,7 +60,10 @@ namespace BLL.Repository
 
         public new IQueryable<Blog> GetById(int id)
         {
-            return entities.Include(b => b.Author).Where(b => b.Id == id);
+            return entities.Include(b => b.Author).
+                Include(b => b.Posts).
+                //ThenInclude(p => p.SingleOrDefault().Poster).
+                Where(b => b.Id == id);
         }
 
         public Blog Publish(string title, string body, int authorId)
@@ -73,7 +78,21 @@ namespace BLL.Repository
             return blog;
         }
 
+        public Post AddPost(string body, int authorid, Blog blog)
+        {
 
+            post.Body = body;
+            post.BlogId = blog.Id;
+            post.Poster = userRepository.GetById(authorid).SingleOrDefault();
+            post.CreatedTime = DateTime.Now;
+            post.Blog = blog;
+            //blog.Posts = new List<Post>();
+
+            blog.Posts.Add(post);
+            Update();
+
+            return post;
+        }
 
     }
 }

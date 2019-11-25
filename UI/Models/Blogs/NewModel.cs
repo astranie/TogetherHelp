@@ -13,10 +13,13 @@ namespace UI.Models.Blogs
         public User Author { get; set; }
         public DateTime CreatedTime { get; set; }
         public IList<Post> Posts { get; set; }
+        public Post Post { get; set; }
         public IList<KeyWord> Keywords { get; set; }
         public int Page { get; set; }
 
         public IList<Blog> Blogs { get; set; }
+
+
 
     }
 }

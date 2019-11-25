@@ -50,6 +50,14 @@ namespace SRC
             return blogRepository.Publish(title, body, Convert.ToInt32(authorId));
         }
 
-      
+
+
+        #region AddPost
+        public Post AddPost(string body, int authorid, Blog blogid)
+        {
+            return blogRepository.AddPost(body, authorid, blogid);
+        }
+
+        #endregion
     }
 }

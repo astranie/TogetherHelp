@@ -50,12 +50,12 @@ Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubn
             //联合主键的典型应用场景
             modelBuilder.Entity<KeywordAndBlog>().HasKey(b2k => new { b2k.BlogId, b2k.KeywordId });
 
-            //modelBuilder.Entity<KeywordAndBlog>().HasOne(b2k => b2k.Blog).
-            //    WithMany(b => b.Keywords).
-            //    HasForeignKey(b => b.BlogId);
-            //modelBuilder.Entity<KeywordAndBlog>().HasOne(b2k => b2k.KeyWord).
-            //    WithMany(k => k.Blogs).
-            //    HasForeignKey(k => k.KeywordId);
+            modelBuilder.Entity<KeywordAndBlog>().HasOne(b2k => b2k.Blog).
+                WithMany(b => b.Keywords).
+                HasForeignKey(b => b.BlogId);
+            modelBuilder.Entity<KeywordAndBlog>().HasOne(b2k => b2k.KeyWord).
+                WithMany(k => k.Blogs).
+                HasForeignKey(k => k.KeywordId);
 
         }
 

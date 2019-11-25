@@ -11,6 +11,8 @@ namespace BLL
         public string Body { get; set; }
 
         public DateTime CreatedTime { get; set; }
+
+
         public Blog Blog { get; set; }
         public int BlogId { get; set; }
 

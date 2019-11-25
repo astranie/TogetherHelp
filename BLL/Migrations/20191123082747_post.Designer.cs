@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BLL.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    [Migration("20191117085532_inial")]
-    partial class inial
+    [Migration("20191123082747_post")]
+    partial class post
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
