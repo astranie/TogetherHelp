@@ -50,6 +50,7 @@ namespace UI.Controllers
             //viewModel = JsonConvert.DeserializeObject<LogViewModel>(user);
 
             int id = blogService.Publish(model.Title, model.Body, CurrentUser().CurrentUserId.ToString()).Id;
+            blogService.AddKeyword(model.Keyword.KeywordContent,blogService.GetById(id.ToString()));
             return Redirect("/Blog/Single?id=" + id);
         }
 
@@ -71,6 +72,7 @@ namespace UI.Controllers
                 model.BlogAuthor = blogService.GetById(id).Author.UserName;
                 //model.Keywords = blogService.GetById(id).Keywords;
                 model.Posts = blogService.GetById(id).Posts;
+                model.Keywords = blogService.GetById(id).Keywords;
 
 
                 return View(model);

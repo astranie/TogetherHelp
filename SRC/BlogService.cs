@@ -59,5 +59,11 @@ namespace SRC
         }
 
         #endregion
-    }
+
+        public KeyWord AddKeyword(string content, Blog blog)
+        {
+            return blogRepository.AddKeyword(content, blog);
+        }
+
+    }  
 }

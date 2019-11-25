@@ -17,7 +17,16 @@
         <hr />
     }
 }
-
+<h3>Keywords</h3>
+@if (Model.Posts != null)
+{
+    @foreach (var item in Model.Keywords)
+    {
+        <p>@item.KeyWord.KeywordContent</p>
+      
+        <hr />
+    }
+}
 
 
 @using (Html.BeginForm())

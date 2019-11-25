@@ -15,6 +15,9 @@ namespace UI.Models.Blogs
         public Post Post { get; set; }
 
         public IList<Post> Posts { get; set; }
+        public IList<KeywordAndBlog> Keywords { get; set; }
+
+
         //public string CommentBody { get; set; }
         //public string CommentAuthor { get; set; }
         //public DateTime CommentTime { get; set; }

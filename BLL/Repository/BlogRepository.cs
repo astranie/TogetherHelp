@@ -11,10 +11,14 @@ namespace BLL.Repository
         private Blog blog;
         private UserRepository userRepository;
         private Post post;
+        private KeyWord keyword;
+        private KeywordAndBlog k2b;
         public BlogRepository(DbContext context, UserRepository repository) : base(context)
         {
             blog = new Blog();
             post = new Post();
+            keyword = new KeyWord();
+            k2b = new KeywordAndBlog();
             userRepository = repository;
         }
 
@@ -60,11 +64,21 @@ namespace BLL.Repository
 
         public new IQueryable<Blog> GetById(int id)
         {
+
+
             return entities.Include(b => b.Author).
                 Include(b => b.Posts).
-                //ThenInclude(p => p.SingleOrDefault().Poster).
+
+
+                Include(b => b.Keywords).
+                ThenInclude(k => k.KeyWord).
+
+
+
                 Where(b => b.Id == id);
         }
+
+
 
         public Blog Publish(string title, string body, int authorId)
         {
@@ -92,6 +106,30 @@ namespace BLL.Repository
             Update();
 
             return post;
+        }
+
+
+        public KeyWord AddKeyword(string content, Blog blog)
+        {
+
+            keyword.KeywordContent = content;
+
+            k2b.Blog = blog;
+            k2b.KeyWord = keyword;
+
+
+            keyword.Blogs = keyword.Blogs ?? new List<KeywordAndBlog>();
+
+            blog.Keywords = blog.Keywords ?? new List<KeywordAndBlog>();
+
+
+            keyword.Blogs.Add(k2b);
+            blog.Keywords.Add(k2b);
+
+            Update();
+
+
+            return keyword;
         }
 
     }

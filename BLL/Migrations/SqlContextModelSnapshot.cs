@@ -31,8 +31,6 @@ namespace BLL.Migrations
 
                     b.Property<DateTime>("CreatedTime");
 
-                    b.Property<int>("KeywordId");
-
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
@@ -64,8 +62,6 @@ namespace BLL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BlogId");
 
                     b.Property<string>("KeywordContent");
 

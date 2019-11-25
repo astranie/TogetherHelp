@@ -18,7 +18,8 @@
         @Html.TextAreaFor(m=>m.Body)<br />
 
         <label>关键字</label><br />
-        @Html.TextBoxFor(m=>m.Keywords)
+        @Html.TextBoxFor(m=>m.Keyword.KeywordContent)
+        
         <br />
         <button type="submit">发布</button>
     }

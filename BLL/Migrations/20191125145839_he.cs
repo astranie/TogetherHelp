@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BLL.Migrations
 {
-    public partial class post : Migration
+    public partial class he : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,8 +29,7 @@ namespace BLL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    KeywordContent = table.Column<string>(nullable: true),
-                    BlogId = table.Column<int>(nullable: false)
+                    KeywordContent = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -75,8 +74,6 @@ namespace BLL.Migrations
                     Title = table.Column<string>(nullable: true),
                     Body = table.Column<string>(nullable: true),
                     AuthorId = table.Column<int>(nullable: true),
-                    KeywordId = table.Column<int>(nullable: false),
-                    PostId = table.Column<int>(nullable: false),
                     CreatedTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

@@ -14,6 +14,8 @@ namespace UI.Models.Blogs
         public DateTime CreatedTime { get; set; }
         public IList<Post> Posts { get; set; }
         public Post Post { get; set; }
+        public KeyWord Keyword { get; set; }
+
         public IList<KeyWord> Keywords { get; set; }
         public int Page { get; set; }
 
