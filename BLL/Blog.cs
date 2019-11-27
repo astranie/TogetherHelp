@@ -14,8 +14,9 @@ namespace BLL
         public IList<Post> Posts { get; set; }
         public IList<KeywordAndBlog> Keywords { get; set; }
 
+        //public IList<Message> Messages { get; set; }
 
-       
+
 
 
 

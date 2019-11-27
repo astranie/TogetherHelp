@@ -14,8 +14,18 @@ namespace UI.Controllers
     public class LogOnController : Controller
     {
         private IUserService userService;
-        LogViewModel viewModel = null;
+        string DUsername = "Username";
+        public LogViewModel CurrentUser()
+        {
 
+            string user = HttpContext.Session.GetString(DUsername);
+            if (string.IsNullOrEmpty(user))
+            {
+
+            }
+            LogViewModel model = JsonConvert.DeserializeObject<LogViewModel>(user);
+            return model;
+        }
         public LogOnController(IUserService service)
         {
             userService = service;
@@ -60,7 +70,7 @@ namespace UI.Controllers
                             //ViewData["logstate"] = true;
 
                             //使用Session
-                            viewModel = new LogViewModel
+                            LogViewModel viewModel = new LogViewModel
                             {
                                 CurrentUserId = int.Parse(userService.LogIn(model.Username, LogPassword).Id.ToString()),
                                 CurrentMD5Password = model.Password,
@@ -87,5 +97,39 @@ namespace UI.Controllers
         }
 
 
+        public IActionResult MyMessages()
+        {
+            MessageModel model = new MessageModel();
+            int UserId = CurrentUser().CurrentUserId;
+            model.Messages = userService.FindMessage(userService.GetById(UserId.ToString())).Where(m => m.ReadTime == null).ToList();
+
+            return View(model);
+        }
+
+        public IActionResult ReadedMessages()
+        {
+            MessageModel model = new MessageModel();
+            int UserId = CurrentUser().CurrentUserId;
+            model.Messages = userService.FindMessage(userService.GetById(UserId.ToString())).Where(m => m.ReadTime != null).ToList();
+
+            return View(model);
+        }
+
+        public IActionResult MessageHasReaded(string id, int userId)
+        {
+            id = HttpContext.Request.Query["id"];
+            userId = CurrentUser().CurrentUserId;
+            userService.HasReaded(id, userService.GetById(userId.ToString()));
+            return Redirect("/LogOn/MyMessages");
+        }
+
+        public IActionResult DeleteMessage(string id, int userId)
+        {
+            id= HttpContext.Request.Query["id"];
+            userId = CurrentUser().CurrentUserId;
+            userService.DeleteMessage(id.ToString(), userService.GetById(userId.ToString()));
+
+            return Redirect("/LogOn/ReadedMessages");
+        }
     }
 }

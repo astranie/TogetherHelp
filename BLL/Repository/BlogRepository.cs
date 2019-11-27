@@ -13,12 +13,14 @@ namespace BLL.Repository
         private Post post;
         private KeyWord keyword;
         private KeywordAndBlog k2b;
+        private Message message;
         public BlogRepository(DbContext context, UserRepository repository) : base(context)
         {
             blog = new Blog();
             post = new Post();
             keyword = new KeyWord();
             k2b = new KeywordAndBlog();
+            message = new Message();
             userRepository = repository;
         }
 
@@ -68,6 +70,7 @@ namespace BLL.Repository
 
             return entities.Include(b => b.Author).
                 Include(b => b.Posts).
+                ThenInclude(p=>p.Poster).
 
 
                 Include(b => b.Keywords).
@@ -102,11 +105,35 @@ namespace BLL.Repository
             post.Blog = blog;
             //blog.Posts = new List<Post>();
 
+            SendMessage(blog, post.Poster);
+
+
+
             blog.Posts.Add(post);
+
+
             Update();
 
             return post;
         }
+
+        public Message SendMessage(Blog blog, User sender)
+        {
+            message.Receiver = blog.Author;
+            message.Sender = sender;
+            message.Content = $"Your article has been {sender.UserName} replied";
+
+            blog.Author.ReceivedMessages = blog.Author.ReceivedMessages ?? new List<Message>();
+            post.Poster.ReceivedMessages = post.Poster.ReceivedMessages ?? new List<Message>();
+
+            blog.Author.ReceivedMessages.Add(message);
+            post.Poster.SendedMessages.Add(message);
+
+            return message;
+
+        }
+
+        
 
 
         public KeyWord AddKeyword(string content, Blog blog)

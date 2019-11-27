@@ -40,7 +40,34 @@ namespace BLL.Repository
 
         public User GetById(string id)
         {
-            return entities.Where(u => u.Id == Convert.ToInt32(id)).SingleOrDefault();
+            return entities.
+                Where(u => u.Id == Convert.ToInt32(id)).
+                Include(u=>u.ReceivedMessages).
+                SingleOrDefault()
+                ;
+        }
+
+        public void DeleteMessage(int id,User user)
+        {
+            Message message = user.ReceivedMessages.Where(m => m.Id == id).SingleOrDefault();
+
+            user.ReceivedMessages.Remove(message);
+
+            Update();
+        }
+
+        public IQueryable<Message> FindMeesage(User user)
+        {
+            user = GetById(user.Id).Single();
+            return user.ReceivedMessages.AsQueryable();
+        }
+
+        public void HasReaded(int v,User user)
+        {
+            user = GetById(user.Id).Single();
+            Message message= user.ReceivedMessages.Where(m => m.Id == v).Single();
+            message.ReadTime = DateTime.Now;
+            Update();
         }
     }
 }

@@ -1,0 +1,12 @@
+﻿@model UI.Models.LogOn.MessageModel
+@{
+    ViewData["Title"] = "已读消息";
+}
+
+<h2>已读消息</h2>
+
+@foreach (var item in Model.Messages)
+{
+    <h1>@item.Content</h1>
+    <a href="/LogOn/DeleteMessage?id=@item.Id">删除</a>
+}

@@ -50,7 +50,7 @@ namespace UI.Controllers
             //viewModel = JsonConvert.DeserializeObject<LogViewModel>(user);
 
             int id = blogService.Publish(model.Title, model.Body, CurrentUser().CurrentUserId.ToString()).Id;
-            blogService.AddKeyword(model.Keyword.KeywordContent,blogService.GetById(id.ToString()));
+            blogService.AddKeyword(model.Keyword.KeywordContent, blogService.GetById(id.ToString()));
             return Redirect("/Blog/Single?id=" + id);
         }
 
@@ -61,6 +61,7 @@ namespace UI.Controllers
             string id = HttpContext.Request.Query["id"];
             if (blogService.GetById(id) != null)
             {
+                model.Id = Convert.ToInt32(id);
                 model.BlogTime = blogService.GetById(id).CreatedTime;
                 model.Title = blogService.GetById(id).Title;
                 model.Body = blogService.GetById(id).Body;
@@ -86,18 +87,33 @@ namespace UI.Controllers
             int userid = CurrentUser().CurrentUserId;
             string content = model.Post.Body;
             int blogid = Convert.ToInt32(HttpContext.Request.Query["id"]);
+
             blogService.AddPost(content, userid, blogService.GetById(blogid.ToString()));
+
+            //blogService.SendMessage(blogService.GetById(blogid.ToString()),
+            //    userService.GetById(CurrentUser().CurrentUserId.ToString()));
+            
+            //添加的逻辑没问题，只是再显示这个页面的时候 关于文章的Model内容没了  所以显示不出
             //此时的Model返回去好像没了之前取到的Blog的关联User
             //应该是Model的问题
-            #region 关于传回Model 其他属性为空 解决方式未定
-            model.BlogTime = blogService.GetById(HttpContext.Request.Query["id"]).CreatedTime;
-            model.Title = blogService.GetById(HttpContext.Request.Query["id"]).Title;
-            model.Body = blogService.GetById(HttpContext.Request.Query["id"]).Body;
-            model.BlogAuthor = blogService.GetById(HttpContext.Request.Query["id"]).Author.UserName;
-            model.Posts = blogService.GetById(HttpContext.Request.Query["id"]).Posts;
+            //解决方式应该是Get Post Redirect 方式
+            #region 关于传回Model 其他属性为空 解决方式未定  已解决20191126  使用Redirect
+            //model.BlogTime = blogService.GetById(HttpContext.Request.Query["id"]).CreatedTime;
+            //model.Title = blogService.GetById(HttpContext.Request.Query["id"]).Title;
+            //model.Body = blogService.GetById(HttpContext.Request.Query["id"]).Body;
+            //model.BlogAuthor = blogService.GetById(HttpContext.Request.Query["id"]).Author.UserName;
+            //model.Posts = blogService.GetById(HttpContext.Request.Query["id"]).Posts;
             #endregion
 
-            return View(model);
+            return Redirect("/Blog/Single?id="+blogid.ToString());
+            //return View(model);
+        }
+
+        public IActionResult Delete()
+        {
+            string id = HttpContext.Request.Query["id"];
+            blogService.Delete(id, blogService.GetById(id));
+            return Redirect("/Blog/Mine");
         }
 
 

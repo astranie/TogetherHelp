@@ -1,0 +1,17 @@
+﻿@model UI.Models.LogOn.MessageModel
+@{
+    ViewData["Title"] = "我的消息";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<a href="/LogOn/ReadedMessages">已读消息</a>
+
+
+@foreach (var item in Model.Messages)
+{
+    <p>@item.Content</p>
+    <a href="/LogOn/MessageHasReaded?id=@item.Id">标为已读</a>
+    <hr />
+}
+

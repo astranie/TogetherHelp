@@ -53,9 +53,10 @@ namespace SRC
 
 
         #region AddPost
-        public Post AddPost(string body, int authorid, Blog blogid)
+        public Post AddPost(string body, int authorid, Blog blog)
         {
-            return blogRepository.AddPost(body, authorid, blogid);
+           
+            return blogRepository.AddPost(body, authorid, blog);
         }
 
         #endregion
@@ -65,5 +66,14 @@ namespace SRC
             return blogRepository.AddKeyword(content, blog);
         }
 
+        public void Delete(string id,Blog blog)
+        {
+            blogRepository.Delete(id,blog);
+        }
+
+        public void SendMessage(Blog blog, User sender)
+        {
+            blogRepository.SendMessage(blog, sender);        
+        }
     }  
 }

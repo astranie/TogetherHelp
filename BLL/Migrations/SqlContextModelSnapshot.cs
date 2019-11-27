@@ -83,6 +83,29 @@ namespace BLL.Migrations
                     b.ToTable("KeywordAndBlog");
                 });
 
+            modelBuilder.Entity("BLL.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content");
+
+                    b.Property<DateTime?>("ReadTime");
+
+                    b.Property<int?>("ReceiverId");
+
+                    b.Property<int?>("SenderId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Message");
+                });
+
             modelBuilder.Entity("BLL.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -170,6 +193,17 @@ namespace BLL.Migrations
                         .WithMany("Blogs")
                         .HasForeignKey("KeywordId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BLL.Message", b =>
+                {
+                    b.HasOne("BLL.User", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiverId");
+
+                    b.HasOne("BLL.User", "Sender")
+                        .WithMany("SendedMessages")
+                        .HasForeignKey("SenderId");
                 });
 
             modelBuilder.Entity("BLL.Post", b =>

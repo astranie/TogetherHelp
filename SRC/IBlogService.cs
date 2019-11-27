@@ -19,5 +19,7 @@ namespace SRC
 
         Post AddPost(string body, int authorid, Blog blogid);
         KeyWord AddKeyword(string content, Blog blog);
+        void Delete(string id,Blog blog);
+        void SendMessage(Blog blog, User sender);
     }
 }

@@ -31,13 +31,15 @@ namespace DBFactory
             //optionsBuilder.UseLoggerFactory(logger);
 
 
-            DatabaseFacade db = new SqlContext().Database;
-            db.EnsureDeleted();
+            DatabaseFacade db = FactoryHelper.Context.Database;
+            //db.EnsureDeleted();
             ////为什么删的是我的数据库？因为SqlContext的连接字符串指定了使用的数据库
             //db.Migrate();
 
             ////new RegisterFactory().Create();
             ////new SuggestFactory().Create();
+
+            new RegisterFactory().DeleteMessage();
 
             Console.WriteLine("Succeed");
             Console.ReadLine();

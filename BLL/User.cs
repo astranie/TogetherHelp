@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace BLL
 {
@@ -11,5 +13,9 @@ namespace BLL
         public User IsInvited { get; set; }
 
         public Email Email { get; set; }
+
+        public IList<Message> SendedMessages { get; set; }
+        public IList<Message> ReceivedMessages { get; set; }
+
     }
 }

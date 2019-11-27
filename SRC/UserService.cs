@@ -1,6 +1,7 @@
 ﻿using BLL;
 using BLL.Repository;
 using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -79,6 +80,21 @@ namespace SRC
                 return stringBuilder.ToString();
             }
 
+        }
+
+        public void DeleteMessage(string id, User user)
+        {
+            userRepository.DeleteMessage(Convert.ToInt32(id), user);
+        }
+
+        public IQueryable<Message> FindMessage(User user)
+        {
+            return userRepository.FindMeesage(user);
+        }
+
+        public void HasReaded(string messageid,User user)
+        {
+            userRepository.HasReaded(Convert.ToInt32(messageid),user);
         }
     }
 }
