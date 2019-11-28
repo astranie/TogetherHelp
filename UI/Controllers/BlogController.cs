@@ -82,6 +82,7 @@ namespace UI.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(Filter.NeedLogOnAttribute))]
         public IActionResult Single(SingleModel model)
         {
             int userid = CurrentUser().CurrentUserId;
@@ -90,9 +91,9 @@ namespace UI.Controllers
 
             blogService.AddPost(content, userid, blogService.GetById(blogid.ToString()));
 
-            //blogService.SendMessage(blogService.GetById(blogid.ToString()),
-            //    userService.GetById(CurrentUser().CurrentUserId.ToString()));
-            
+            blogService.SendMessage(blogService.GetById(blogid.ToString()),
+                userService.GetById(CurrentUser().CurrentUserId.ToString()));
+
             //添加的逻辑没问题，只是再显示这个页面的时候 关于文章的Model内容没了  所以显示不出
             //此时的Model返回去好像没了之前取到的Blog的关联User
             //应该是Model的问题

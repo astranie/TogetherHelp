@@ -50,6 +50,7 @@ namespace UI
             services.AddScoped<SuggestRepository, SuggestRepository>();
             services.AddScoped<BlogRepository, BlogRepository>();
             services.AddScoped<EmaileRepository, EmaileRepository>();
+            services.AddScoped<Filter.NeedLogOnAttribute,Filter.NeedLogOnAttribute>();
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
