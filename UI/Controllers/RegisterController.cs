@@ -111,32 +111,6 @@ namespace UI.Controllers
                 return View();
             }
 
-        }
-
-
-        #region 存文件到本地
-        [HttpPost]
-        public IActionResult SetIcon(IFormFile file)
-        {
-            #region 上传文件保存到本地
-            string path = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, 
-                DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(),file.FileName);
-            //FileIOPermission iOPermission = new FileIOPermission(PermissionState.Unrestricted);
-            //iOPermission.AddPathList(FileIOPermissionAccess.AllAccess, path);
-
-            //DirectoryInfo directoryInfo = new DirectoryInfo(path);
-            //DirectorySecurity directorySecurity = new DirectorySecurity();
-            //directorySecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-            //directoryInfo.SetAccessControl(directorySecurity);
-
-            Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
-
-            file.CopyTo(stream);
-
-            #endregion
-            return View();
-
-        }
-        #endregion
+        }      
     }
 }

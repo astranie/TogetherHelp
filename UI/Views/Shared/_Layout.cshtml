@@ -25,7 +25,7 @@
 <body>
     @if (logViewModel != null)
     {
-        <h1>你好，@logViewModel.CurrentUsername</h1>
+        <h1>你好，<a asp-action="Introduction" asp-controller="LogOn">@logViewModel.CurrentUsername</a></h1>
         <a asp-action="Mine" asp-controller="Blog">我的文章</a>
         <a asp-action="MyMessages" asp-controller="LogOn">我的消息</a>
     }

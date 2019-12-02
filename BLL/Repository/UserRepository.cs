@@ -69,5 +69,13 @@ namespace BLL.Repository
             message.ReadTime = DateTime.Now;
             Update();
         }
+
+        public void AddHeader(string path, string userId)
+        {
+            GetById(userId).HeaderPath = path;
+            Update();
+        }
+
+        
     }
 }

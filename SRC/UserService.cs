@@ -1,6 +1,7 @@
 ﻿using BLL;
 using BLL.Repository;
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -93,9 +94,23 @@ namespace SRC
             return userRepository.FindMeesage(user);
         }
 
-        public void HasReaded(string messageid,User user)
+        public void HasReaded(string messageid, User user)
         {
-            userRepository.HasReaded(Convert.ToInt32(messageid),user);
+            userRepository.HasReaded(Convert.ToInt32(messageid), user);
+        }
+
+        public void AddHeader(string path, string userId)
+        {
+            userRepository.AddHeader(path, userId);
+        }
+
+        public byte[] GetHeader(string userId)
+        {
+            string path = GetById(userId).HeaderPath?? @"C:\Users\nnnzx\source\icon_boss.png";
+            //Stream stream = new MemoryStream();
+            //StreamReader streamReader = new StreamReader(path);
+            
+            return File.ReadAllBytes(path);
         }
     }
 }

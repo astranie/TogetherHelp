@@ -4,8 +4,10 @@ using Newtonsoft.Json;
 using SRC;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using UI.Filter;
 using UI.Models;
 using UI.Models.LogOn;
 
@@ -125,11 +127,69 @@ namespace UI.Controllers
 
         public IActionResult DeleteMessage(string id, int userId)
         {
-            id= HttpContext.Request.Query["id"];
+            id = HttpContext.Request.Query["id"];
             userId = CurrentUser().CurrentUserId;
             userService.DeleteMessage(id.ToString(), userService.GetById(userId.ToString()));
 
             return Redirect("/LogOn/ReadedMessages");
+        }
+
+
+        #region 存文件到本地
+        [ServiceFilter(typeof(NeedLogOnAttribute))]
+        [HttpPost]
+        public IActionResult SetIcon(IFormFile file)
+        {
+
+            string path = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName,
+                DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(), CurrentUser().CurrentUsername);
+            //FileIOPermission iOPermission = new FileIOPermission(PermissionState.Unrestricted);
+            //iOPermission.AddPathList(FileIOPermissionAccess.AllAccess, path);
+
+            //DirectoryInfo directoryInfo = new DirectoryInfo(path);
+            //DirectorySecurity directorySecurity = new DirectorySecurity();
+            //directorySecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+            //directoryInfo.SetAccessControl(directorySecurity);
+
+            Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
+            MemoryStream streamM = new MemoryStream();
+
+
+
+            file.CopyTo(stream);
+            
+
+            userService.AddHeader(path, CurrentUser().CurrentUserId.ToString());
+
+            byte[] p = streamM.ToArray();
+
+            stream.Dispose();
+
+
+            return Redirect("Introduction");
+        }
+        #endregion
+
+        public IActionResult Introduction()
+        {
+            IntroductionModel model = new IntroductionModel();
+            model.CurrentUserId = CurrentUser().CurrentUserId;
+            model.CurrentUsername = CurrentUser().CurrentUsername;
+
+            model.RegitseredTime = -(DateTime.Now.Day - userService.GetById(CurrentUser().CurrentUserId.ToString()).TimeCreated.Day);
+
+            return View(model);
+        }
+
+        public IActionResult ShowHeader()
+        {
+           
+            byte[] headerByte= userService.GetHeader(CurrentUser().CurrentUserId.ToString());
+            if (headerByte==null)
+            {
+                return null;
+            }
+            return File(headerByte,"image/*");
         }
     }
 }

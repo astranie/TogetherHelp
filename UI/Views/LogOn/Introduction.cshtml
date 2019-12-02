@@ -1,0 +1,27 @@
+﻿
+
+@model UI.Models.LogOn.IntroductionModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script>
+     
+    </script>
+    @{
+        ViewData["Title"] = "个人信息";
+    }
+</head>
+<body>
+    <img src="/LogOn/ShowHeader"/>
+    <form method="post" enctype="multipart/form-data" action="/LogOn/SetIcon">
+        <input name="file" type="file" accept="image/*" />
+        <button type="submit">上传</button>
+    </form>
+    <h1>@Model.CurrentUsername</h1>
+    <br />
+    <p>已加入本站 @Model.RegitseredTime 天</p>
+    <p>财富值 @Model.Money</p>
+</body>
+</html>

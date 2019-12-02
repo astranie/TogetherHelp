@@ -11,7 +11,7 @@ namespace BLL
         public string  PassWord { get; set; }
         public DateTime TimeCreated { get; set; }
 
-        public byte[] HeaderImage { get; set; }
+        public string HeaderPath { get; set; }
 
 
         public User IsInvited { get; set; }

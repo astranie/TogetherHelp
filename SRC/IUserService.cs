@@ -19,5 +19,7 @@ namespace SRC
 
         IQueryable<Message> FindMessage(User user);
         void HasReaded(string id,User user);
+        void AddHeader(string path, string userId);
+        byte[] GetHeader(string userId);
     }
 }

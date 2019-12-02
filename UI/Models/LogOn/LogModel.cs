@@ -19,5 +19,8 @@ namespace UI.Models.LogOn
         public bool RememberMe { get; set; }
 
         public string LOGSTATE = "logstate";
+
+    
+
     }
 }
