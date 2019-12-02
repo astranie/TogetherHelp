@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BLL
 {
@@ -8,7 +9,10 @@ namespace BLL
     {
         public string UserName { get; set; }
         public string  PassWord { get; set; }
-        public DateTime TimeCreated { get; set; } = DateTime.Now;
+        public DateTime TimeCreated { get; set; }
+
+        public byte[] HeaderImage { get; set; }
+
 
         public User IsInvited { get; set; }
 

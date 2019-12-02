@@ -124,7 +124,7 @@ namespace BLL.Repository
             message.Content = $"Your article has been {sender.UserName} replied";
 
             blog.Author.ReceivedMessages = blog.Author.ReceivedMessages ?? new List<Message>();
-            post.Poster.ReceivedMessages = post.Poster.ReceivedMessages ?? new List<Message>();
+            post.Poster.SendedMessages = post.Poster.SendedMessages ?? new List<Message>();
 
             blog.Author.ReceivedMessages.Add(message);
             post.Poster.SendedMessages.Add(message);

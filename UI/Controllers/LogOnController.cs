@@ -73,7 +73,7 @@ namespace UI.Controllers
                             LogViewModel viewModel = new LogViewModel
                             {
                                 CurrentUserId = int.Parse(userService.LogIn(model.Username, LogPassword).Id.ToString()),
-                                CurrentMD5Password = model.Password,
+                                CurrentMD5Password = LogPassword,
                                 CurrentUsername = model.Username
                             };
 

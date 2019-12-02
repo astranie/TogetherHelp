@@ -3,6 +3,11 @@ using SRC;
 using System;
 using UI.Models.Register;
 using Microsoft.AspNetCore.Http;
+using static System.Net.WebRequestMethods;
+using System.IO;
+using System.Security;
+using System.Security.AccessControl;
+using System.Security.Permissions;
 
 namespace UI.Controllers
 {
@@ -11,7 +16,7 @@ namespace UI.Controllers
 
         private IUserService userService;
         private IEmailService emailService;
-        public RegisterController(IUserService userservice,IEmailService emailservice)
+        public RegisterController(IUserService userservice, IEmailService emailservice)
         {
             userService = userservice;
             emailService = emailservice;
@@ -43,6 +48,7 @@ namespace UI.Controllers
                 }
                 else
                 {
+                   
                     userService.Register(model.Username, model.Password);
                 }
             }
@@ -54,7 +60,7 @@ namespace UI.Controllers
         public ActionResult Email(EmailModel model)
         {
 
-           
+
             if (ModelState.IsValid)
             {
                 if (emailService.HasValidated(model.EmailAddress) != null)
@@ -87,7 +93,7 @@ namespace UI.Controllers
 
         public ActionResult Email(string _id, string _code)
         {
-           
+
             if (HttpContext.Request.Query.Count == 0)
             {
                 return View();
@@ -96,7 +102,7 @@ namespace UI.Controllers
             {
                 int id = Convert.ToInt32(HttpContext.Request.Query["id"]);
                 string code = HttpContext.Request.Query["code"];
-              
+
 
                 emailService.ValidateEmail(id, code);
                 ViewData["ValidateModel"] = "注册成功";
@@ -107,5 +113,30 @@ namespace UI.Controllers
 
         }
 
+
+        #region 存文件到本地
+        [HttpPost]
+        public IActionResult SetIcon(IFormFile file)
+        {
+            #region 上传文件保存到本地
+            string path = Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, 
+                DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString(),file.FileName);
+            //FileIOPermission iOPermission = new FileIOPermission(PermissionState.Unrestricted);
+            //iOPermission.AddPathList(FileIOPermissionAccess.AllAccess, path);
+
+            //DirectoryInfo directoryInfo = new DirectoryInfo(path);
+            //DirectorySecurity directorySecurity = new DirectorySecurity();
+            //directorySecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+            //directoryInfo.SetAccessControl(directorySecurity);
+
+            Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write);
+
+            file.CopyTo(stream);
+
+            #endregion
+            return View();
+
+        }
+        #endregion
     }
 }

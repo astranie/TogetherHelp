@@ -38,6 +38,7 @@ namespace SRC
 
             user.PassWord = GetMD5(password);
             user.UserName = username;
+            user.TimeCreated = DateTime.Now;
 
             userRepository.Save(user);
 
