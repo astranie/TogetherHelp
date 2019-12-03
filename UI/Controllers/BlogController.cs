@@ -106,7 +106,7 @@ namespace UI.Controllers
             //model.Posts = blogService.GetById(HttpContext.Request.Query["id"]).Posts;
             #endregion
 
-            return Redirect("/Blog/Single?id="+blogid.ToString());
+            return Redirect("/Blog/Single?id=" + blogid.ToString());
             //return View(model);
         }
 
@@ -123,12 +123,19 @@ namespace UI.Controllers
             string page = HttpContext.Request.Query["page"];
             string blogger = HttpContext.Request.Query["blogger"];
 
+
+
             if (string.IsNullOrEmpty(blogger))
             {
                 if (!string.IsNullOrEmpty(page))
                 {
                     model.Page = Convert.ToInt16(page);
                     model.Blogs = blogService.Get(model.Page, 4).ToList();
+
+                    model.maxPage = blogService.GetNumber() / 4 + 1;
+
+
+                    model.pageContainer = Paged(model.maxPage, model.Page);
 
                     return View(model);
                 }
@@ -154,8 +161,6 @@ namespace UI.Controllers
                     {
                         throw;
                     }
-
-
                     return View(model);
                 }
                 else
@@ -174,10 +179,14 @@ namespace UI.Controllers
             var blogs = blogService.GetByAuthor(userService.GetById(id.ToString()));
             string page = HttpContext.Request.Query["page"];
 
+
+
             if (!string.IsNullOrEmpty(page))
             {
                 model.Page = Convert.ToInt16(page);
                 model.Blogs = blogService.Get(blogs, model.Page, 4).ToList();
+
+
 
                 return View(model);
             }
@@ -205,20 +214,33 @@ namespace UI.Controllers
 
 
 
-        //下一页的超链接
-        public IActionResult Nextpage(int page)
+
+
+        public int[] Paged(int maxpage, int currentpage)
         {
-            string currentPage = HttpContext.Request.Query["page"];
-            if (!string.IsNullOrEmpty(currentPage))
+            int[] arr = null;
+
+            int flag = maxpage / 5;
+            int rest = maxpage % 5;
+
+            if (currentpage > flag * 5)
             {
-                page = Convert.ToInt32(currentPage);
-                page++;
-                return Redirect("/Blog/List?page=" + page);
+                arr = new int[rest];
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    arr[i] = flag * 5 + i + 1;
+                }
             }
             else
             {
-                return Redirect("/Blog/List");
+                int sflag = currentpage / 5;
+                arr = new int[5];
+                for (int i = 0; i < 5; i++)
+                {
+                    arr[i] = sflag * 5 + 1 + i;
+                }
             }
+            return arr;
         }
 
     }

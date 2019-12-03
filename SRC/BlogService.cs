@@ -75,5 +75,10 @@ namespace SRC
         {
             blogRepository.SendMessage(blog, sender);        
         }
+
+        public int GetNumber()
+        {
+            return blogRepository.GetNumber();
+        }
     }  
 }

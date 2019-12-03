@@ -75,7 +75,5 @@ namespace BLL.Repository
             GetById(userId).HeaderPath = path;
             Update();
         }
-
-        
     }
 }

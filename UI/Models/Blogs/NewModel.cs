@@ -22,6 +22,8 @@ namespace UI.Models.Blogs
         public IList<Blog> Blogs { get; set; }
 
 
+        public int[] pageContainer { get; set; }
+        public int maxPage { get; set; }
 
     }
 }

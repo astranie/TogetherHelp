@@ -9,7 +9,6 @@
     {
         logViewModel = JsonConvert.DeserializeObject<LogViewModel>(jsonUser);
     }
-
 }
 
 <!DOCTYPE html>
@@ -41,6 +40,7 @@
                     <li><a asp-area="" asp-controller="Register" asp-action="Email">邮箱验证</a></li>
                     <li><a asp-area="" asp-controller="Suggest" asp-action="Index">意见建议</a></li>
                     <li><a asp-area="" asp-controller="Blog" asp-action="New">文章发布</a></li>
+                    <li><a asp-area="" asp-controller="Blog" asp-action="List">文章列表</a></li>
                 </ul>
             </div>
         </div>

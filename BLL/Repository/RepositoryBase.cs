@@ -69,6 +69,9 @@ namespace BLL.Repository
             return targets.Skip((pageindex - 1) * count).Take(count);
         }
 
-
+        public int GetNumber()
+        {
+            return entities.Count();
+        }
     }
 }

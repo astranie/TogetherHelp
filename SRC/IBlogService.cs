@@ -21,5 +21,7 @@ namespace SRC
         KeyWord AddKeyword(string content, Blog blog);
         void Delete(string id,Blog blog);
         void SendMessage(Blog blog, User sender);
+
+        int GetNumber();
     }
 }

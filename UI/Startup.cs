@@ -50,6 +50,7 @@ namespace UI
             services.AddScoped<SuggestRepository, SuggestRepository>();
             services.AddScoped<BlogRepository, BlogRepository>();
             services.AddScoped<EmaileRepository, EmaileRepository>();
+            //services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<Filter.NeedLogOnAttribute,Filter.NeedLogOnAttribute>();
 
 
