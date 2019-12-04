@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BLL.Repository;
+using ElmahCore;
+using ElmahCore.Mvc;
+using ElmahCore.Mvc.Notifiers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using SRC;
 
 namespace UI
@@ -46,12 +51,27 @@ namespace UI
             #endregion
 
             services.AddScoped<DbContext, SqlContext>();
-            services.AddScoped<UserRepository, UserRepository>();
+            //services.AddScoped<UserRepository, UserRepository>();
             services.AddScoped<SuggestRepository, SuggestRepository>();
             services.AddScoped<BlogRepository, BlogRepository>();
             services.AddScoped<EmaileRepository, EmaileRepository>();
             //services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<Filter.NeedLogOnAttribute,Filter.NeedLogOnAttribute>();
+            services.AddScoped<Filter.NeedLogOnAttribute, Filter.NeedLogOnAttribute>();
+
+            //注册Elmah中间件
+            services.AddElmah<XmlFileErrorLog>(option =>
+            {
+                string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+                option.Path = "/elm";
+                option.Notifiers.Add(new ErrorMailNotifier("nie", new EmailOptions
+                {
+                    MailRecipient = "123965977@qq.com",
+                    MailSender = "173569582@qq.com",
+
+                }));
+                option.LogPath = path;
+            });
+            services.AddElmah();
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -71,18 +91,27 @@ namespace UI
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseElmah();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    //注册静态文件的方法
+            //    RequestPath = "/node_modules",
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "node_modules"))
+            //});
+
 
             app.UseStaticFiles();
             app.UseCookiePolicy(new CookiePolicyOptions
             {
                 CheckConsentNeeded = x => false
             });
+
             app.UseSession();
             app.UseMvc(routes =>
             {
