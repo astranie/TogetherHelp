@@ -51,7 +51,7 @@ namespace UI
             #endregion
 
             services.AddScoped<DbContext, SqlContext>();
-            //services.AddScoped<UserRepository, UserRepository>();
+            services.AddScoped<UserRepository, UserRepository>();
             services.AddScoped<SuggestRepository, SuggestRepository>();
             services.AddScoped<BlogRepository, BlogRepository>();
             services.AddScoped<EmaileRepository, EmaileRepository>();
@@ -63,19 +63,22 @@ namespace UI
             {
                 string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
                 option.Path = "/elm";
-                option.Notifiers.Add(new ErrorMailNotifier("nie", new EmailOptions
-                {
-                    MailRecipient = "123965977@qq.com",
-                    MailSender = "173569582@qq.com",
-
-                }));
                 option.LogPath = path;
             });
-            services.AddElmah();
+         
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddMemoryCache();
+
+
+            //services.AddMemoryCache();
+            services.AddDistributedRedisCache(options=>
+            {
+                options.Configuration = "localhost";
+                options.InstanceName = "my-redis";//服务器名字
+            });
+
+
             services.AddSession(option =>
             {
                 option.Cookie = new CookieBuilder
@@ -91,7 +94,8 @@ namespace UI
         {
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
+                app.UseStatusCodePages();//不加的话是浏览器给的错误处理结果
                 app.UseElmah();
             }
             else
@@ -111,7 +115,7 @@ namespace UI
             {
                 CheckConsentNeeded = x => false
             });
-
+            
             app.UseSession();
             app.UseMvc(routes =>
             {

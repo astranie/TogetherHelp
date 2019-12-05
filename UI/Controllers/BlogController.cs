@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using SRC;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UI.Models;
 using UI.Models.Blogs;
 
@@ -14,6 +18,9 @@ namespace UI.Controllers
         private IBlogService blogService;
         private IUserService userService;
         string DUsername = "Username";
+
+        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache distributedCache;
 
         //获取当前登录用户的信息
         public LogViewModel CurrentUser()
@@ -29,10 +36,13 @@ namespace UI.Controllers
         }
 
 
-        public BlogController(IBlogService service, IUserService userservice)
+        public BlogController(IBlogService service, IUserService userservice,
+            IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
             blogService = service;
             userService = userservice;
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
         }
 
 
@@ -141,7 +151,42 @@ namespace UI.Controllers
                 }
                 else
                 {
-                    model.Blogs = blogService.Get().ToList();
+                    //  浏览单个文章之后，为了提高文章列表的响应速度，可以添加个内存缓存
+                    if (!memoryCache.TryGetValue(ConstInUseCache.AllBlogs,
+                        out IList<BLL.Blog> blogs))  //  如果缓存中没有找到数据，便从数据库读取，下部逻辑
+                    {
+                        blogs = blogService.Get().ToList();
+                        var cacheOptions = new MemoryCacheEntryOptions().
+                            SetSlidingExpiration(TimeSpan.FromMinutes(7.0));
+                        memoryCache.Set(ConstInUseCache.AllBlogs, blogs, cacheOptions);
+                    }
+
+
+                    //我没有redis服务器--  搁置
+                    //IList<BLL.Blog> blogs = null;
+                    //if (distributedCache.Get(ConstInUseCache.AllBlogs) == null)
+                    //{
+                    //    //如果缓存没数据，把数据取出来放进缓存
+                    //    blogs = blogService.Get().ToList();
+                    //    var ser_blogs = JsonConvert.SerializeObject(blogs);
+                    //    byte[] byt_blogs = Encoding.UTF8.GetBytes(ser_blogs);
+
+                    //    var cacheEntryOptions = new DistributedCacheEntryOptions().
+                    //        SetSlidingExpiration(TimeSpan.FromMinutes(7.5));
+
+                    //    distributedCache.Set(ConstInUseCache.AllBlogs, byt_blogs, cacheEntryOptions);
+                    //}
+                    //else
+                    //{
+                    //    //如果缓存有数据，将数据从缓存中获取、解码
+                    //    byte[] byt_bolgs = distributedCache.Get(ConstInUseCache.AllBlogs);
+                    //    string s_blogs = Encoding.UTF8.GetString(byt_bolgs);
+                    //    blogs = JsonConvert.DeserializeObject<IList<BLL.Blog>>(s_blogs);
+                    //}
+
+
+
+                    model.Blogs = blogs;
                     return View(model);
                 }
             }
