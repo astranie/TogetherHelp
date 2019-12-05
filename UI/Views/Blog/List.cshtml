@@ -15,20 +15,6 @@ else
 }
 
 
-
-@if (!string.IsNullOrEmpty(Context.Request.Query["page"]))
-{
-    string lastpage = $"/Blog/List?page={Model.Page++}";
-    string nextpage = $"/Blog/List?page={Model.Page--}";
-    <a href="@lastpage">上一页</a>
-    for (int i = 0; i < Model.pageContainer.Length; i++)
-    {
-        <a href="/Blog/List?page=@Model.pageContainer[i]">@Model.pageContainer[i] </a>
-    }
-    <a href="@nextpage">下一页</a>
-}
-
-
 @foreach (var item in Model.Blogs)
 {
     <hr />
@@ -42,7 +28,17 @@ else
 
     <hr />
 }
-
+@if (!string.IsNullOrEmpty(Context.Request.Query["page"]))
+{
+    string lastpage = $"/Blog/List?page={Model.Page++}";
+    string nextpage = $"/Blog/List?page={Model.Page--}";
+    <a href="@lastpage">上一页</a>
+    for (int i = 0; i < Model.pageContainer.Length; i++)
+    {
+        <a href="/Blog/List?page=@Model.pageContainer[i]">@Model.pageContainer[i] </a>
+    }
+    <a href="@nextpage">下一页</a>
+}
 
 
 

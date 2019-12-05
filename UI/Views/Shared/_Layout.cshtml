@@ -2,6 +2,7 @@
 
 @using Microsoft.AspNetCore.Http;
 @using Newtonsoft.Json;
+
 @{
     string jsonUser = Context.Session.GetString("Username");
     LogViewModel logViewModel = null;
@@ -14,35 +15,57 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <script type="text/javascript" src="~/js/site.js"></script>
     <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
 </head>
-<body>
-    @if (logViewModel != null)
-    {
-        <h1>你好，<a asp-action="Introduction" asp-controller="LogOn">@logViewModel.CurrentUsername</a></h1>
-        <a asp-action="Mine" asp-controller="Blog">我的文章</a>
-        <a asp-action="MyMessages" asp-controller="LogOn">我的消息</a>
-    }
-    else
-    {
-        <a asp-action="Log" asp-controller="LogOn">登录</a>
-        <a asp-action="Index" asp-controller="Register">注册</a>
-    }
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+<body class="container">
+
+    <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Register" asp-action="Email">邮箱验证</a></li>
-                    <li><a asp-area="" asp-controller="Suggest" asp-action="Index">意见建议</a></li>
+                    <li>
+                        <a asp-action="Index" asp-controller="Home">Home</a>
+                    </li>
+ 
+                    
                     <li><a asp-area="" asp-controller="Blog" asp-action="New">文章发布</a></li>
                     <li><a asp-area="" asp-controller="Blog" asp-action="List">文章列表</a></li>
                 </ul>
+                <div class="navbar-collapse collapse navbar-right">
+                    @if (logViewModel != null)
+                    {
+
+                        <ul class="nav navbar-nav">
+                            <li class="navbar">
+
+                                <a asp-action="Introduction" asp-controller="LogOn">你好，@logViewModel.CurrentUsername</a>
+                            </li>
+                            <li><a asp-action="Mine" asp-controller="Blog">我的文章</a></li>
+                            <li><a asp-action="MyMessages" asp-controller="LogOn">我的消息</a></li>
+                        </ul>
+
+                    }
+                    else
+                    { <ul class="nav navbar-nav">
+                            <li><a asp-action="Log" asp-controller="LogOn" class="">登录</a></li>
+                            <li> <a asp-action="Index" asp-controller="Register">注册</a></li>
+                        </ul>
+                    }
+                </div>
             </div>
+
+
         </div>
     </nav>
     <h2>@ViewData["Title"]</h2>
@@ -52,8 +75,12 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2019 - MyProject</p>
+            <div>
+                <p class="text-info left">&copy; 2019 - Nnnnzx</p>
+            </div>
+            <a asp-area="" asp-controller="Suggest" asp-action="Index">意见建议</a>
         </footer>
     </div>
 </body>
+
 </html>

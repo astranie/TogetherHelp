@@ -1,42 +1,63 @@
 ﻿@model UI.Models.Blogs.SingleModel
-<div>
-    <h2>@Model.Title</h2>
-    <span>@Model.BlogTime</span>
-    <span>@Model.BlogAuthor</span>
-    <a href="/Blog/Delete?id=@Model.Id">删除</a>
-</div>
-<p>@Model.Body</p>
 
-<h3>Comment</h3>
-@if (Model.Posts != null)
-{
-    @foreach (var item in Model.Posts)
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script type="text/javascript" src="~/js/site.js"></script>
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ 
+</head>
+<body class="container">
+
+    <div>
+        <h2>@Model.Title</h2>
+        <span>@Model.BlogTime</span>
+        <span>@Model.BlogAuthor</span>
+        <a href="/Blog/Delete?id=@Model.Id">删除</a>
+        <a asp-action="List">返回</a>
+    </div>
+    <p>@Model.Body</p>
+
+    <h3>Comment</h3>
+    @if (Model.Posts != null)
     {
-        <p>@item.Body</p>
-        <p>@item.CreatedTime</p>
-        <p>@item.Poster.UserName</p>
-        <hr />
+        @foreach (var item in Model.Posts)
+        {
+            <p>@item.Body</p>
+            <p>@item.CreatedTime</p>
+            <p>@item.Poster.UserName</p>
+            <hr />
+        }
     }
-}
-<h3>Keywords</h3>
-@if (Model.Posts != null)
-{
-    @foreach (var item in Model.Keywords)
+    <h3>Keywords</h3>
+    @if (Model.Posts != null)
     {
-        <p>@item.KeyWord.KeywordContent</p>
-      
-        <hr />
+        @foreach (var item in Model.Keywords)
+        {
+            <p>@item.KeyWord.KeywordContent</p>
+
+            <hr />
+        }
     }
-}
 
 
-@using (Html.BeginForm())
-{
-    <label>发表评论</label><br />
-    @Html.TextAreaFor(m => m.Post.Body)
-    <br />
-    <button type="submit">提交</button>
-}
+    @using (Html.BeginForm())
+    {
+        <label>发表评论</label>
+        <br />
+        @Html.TextAreaFor(m => m.Post.Body)
+        <br />
+        <button type="submit">提交</button>
+    }
 
-
-
+</body>
+</html>

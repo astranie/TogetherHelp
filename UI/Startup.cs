@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using BLL.Repository;
 using ElmahCore;
 using ElmahCore.Mvc;
-using ElmahCore.Mvc.Notifiers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,8 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using SRC;
 
 namespace UI
 {
@@ -71,12 +65,12 @@ namespace UI
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 
-            //services.AddMemoryCache();
-            services.AddDistributedRedisCache(options=>
-            {
-                options.Configuration = "localhost";
-                options.InstanceName = "my-redis";//服务器名字
-            });
+            services.AddMemoryCache();
+            //services.AddDistributedRedisCache(options=>
+            //{
+            //    options.Configuration = "localhost";
+            //    options.InstanceName = "my-redis";//服务器名字
+            //});
 
 
             services.AddSession(option =>
@@ -86,6 +80,7 @@ namespace UI
                     Name = "MySession"
                 };
                 option.IdleTimeout = new TimeSpan(0, 3, 0);
+                
             });
         }
 
@@ -95,7 +90,7 @@ namespace UI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseStatusCodePages();//不加的话是浏览器给的错误处理结果
+                //app.UseStatusCodePages();//不加的话是浏览器给的错误处理结果
                 app.UseElmah();
             }
             else
@@ -111,6 +106,7 @@ namespace UI
 
 
             app.UseStaticFiles();
+
             app.UseCookiePolicy(new CookiePolicyOptions
             {
                 CheckConsentNeeded = x => false
