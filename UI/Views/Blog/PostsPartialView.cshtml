@@ -1,0 +1,11 @@
+﻿@model UI.Models.Blogs.PartialViewModel.PostsModel
+
+@foreach (var item in Model.Posts)
+{
+    <p>
+        @item.CreatedTime||
+        <span class="text-info"> @item.Poster.UserName</span>
+    </p>
+    <p>@item.Body</p>
+}
+

@@ -8,8 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using UI.Models;
 using UI.Models.Blogs;
+using UI.Models.Blogs.PartialViewModel;
 
 namespace UI.Controllers
 {
@@ -18,7 +20,7 @@ namespace UI.Controllers
         private IBlogService blogService;
         private IUserService userService;
         string DUsername = "Username";
-
+       
         private readonly IMemoryCache memoryCache;
         private readonly IDistributedCache distributedCache;
 
@@ -66,6 +68,8 @@ namespace UI.Controllers
 
         public IActionResult Single()
         {
+          
+
             SingleModel model = new SingleModel();
 
             string id = HttpContext.Request.Query["id"];
@@ -92,14 +96,15 @@ namespace UI.Controllers
         }
 
   
-
+        
         [HttpPost]
         [ServiceFilter(typeof(Filter.NeedLogOnAttribute))]
         public IActionResult Single(SingleModel model)
         {
+
             int userid = CurrentUser().CurrentUserId;
             string content = model.Post.Body;
-            int blogid = Convert.ToInt32(HttpContext.Request.Query["id"]);
+            int blogid = Convert.ToInt32(HttpContext.Request.Query["id"]);//在ajax里好像没有用
 
             blogService.AddPost(content, userid, blogService.GetById(blogid.ToString()));
 
@@ -109,7 +114,7 @@ namespace UI.Controllers
             //添加的逻辑没问题，只是再显示这个页面的时候 关于文章的Model内容没了  所以显示不出
             //此时的Model返回去好像没了之前取到的Blog的关联User
             //应该是Model的问题
-            //解决方式应该是Get Post Redirect 方式
+            //解决方式应该是Get Post Redirect 方式    还有Ajax20191206
             #region 关于传回Model 其他属性为空 解决方式未定  已解决20191126  使用Redirect
             //model.BlogTime = blogService.GetById(HttpContext.Request.Query["id"]).CreatedTime;
             //model.Title = blogService.GetById(HttpContext.Request.Query["id"]).Title;
@@ -122,6 +127,17 @@ namespace UI.Controllers
             //return View(model);
         }
 
+        //ajax异步加载
+        public IActionResult Posts(string id)
+        {
+            Thread.Sleep(200);
+
+            PostsModel model = new PostsModel();
+            model.Posts = blogService.GetById(id).Posts;
+            return PartialView("PostsPartialView",model);
+        }
+        
+        [ServiceFilter(typeof(Filter.NeedLogOnAttribute))]
         public IActionResult Delete()
         {
             string id = HttpContext.Request.Query["id"];

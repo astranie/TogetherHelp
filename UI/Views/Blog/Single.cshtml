@@ -4,25 +4,16 @@
 <html>
 <head>
 
-    <script type="text/javascript" src="~/js/site.js"></script>
-    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
-    <script type="text/javascript" src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-    <script type="text/javascript" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
-
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <title>@Model.Title</title>
 </head>
 <body>
 
     <div>
         <h2>@Model.Title</h2>
         <p>
-           发布时间：@Model.BlogTime 
-            <span class="text-info">|     作者：@Model.BlogAuthor</span>   
+            发布时间：@Model.BlogTime
+            <span class="text-info">|     作者：@Model.BlogAuthor</span>
             <span class="pull-right">
                 <a href="/Blog/Delete?id=@Model.Id" class="btn-default">删除</a>
                 <a asp-action="List" class="btn-default">返回</a>
@@ -36,7 +27,8 @@
     <hr />
 
     <h4>Comment</h4>
-    @if (Model.Posts != null)
+
+    @*@if (Model.Posts != null)
     {
         @foreach (var item in Model.Posts)
         {
@@ -46,7 +38,13 @@
             <p>@item.Body</p>
             <hr />
         }
-    }
+    }*@
+    <hr />
+
+    <div id="comments">
+
+    </div>
+
     <h5>Keywords</h5>
     @if (Model.Posts != null)
     {
@@ -59,15 +57,37 @@
     }
 
 
-    @using (Html.BeginForm())
+    @using (Html.BeginForm(FormMethod.Post,new { id="postform"}))
     {
         <label>发表评论</label>
         <br />
         @Html.TextAreaFor(m => m.Post.Body)
         <br />
-        <button type="submit">提交</button>
+        <button type="submit" id="btn-post">提交</button>
     }
 
+
+    <script>
+        //load方法
+        //$('#comments').load("/Blog/Posts?id=@Model.Id")
+        //get方法
+        $.get("/Blog/Posts?id=@Model.Id", function (data) {
+            $('#comments').html(data);
+        });
+
+        $(document).ready(function () {
+            $('#btn-post').click(function () {
+                $.post('/Blog/Single?id=@Model.Id', $('#postform').serialize())
+            })
+        })
+
+     
+        //$.post("/Blog/Single?id=@Model.Id", $ ("postform").serialize);//光这样写 就算不点击提交  form表单也提交至后台了
+
+      
+        
+
+    </script>
 
 
 
