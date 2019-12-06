@@ -14,36 +14,45 @@
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- 
+
 </head>
-<body class="container">
+<body>
 
     <div>
         <h2>@Model.Title</h2>
-        <span>@Model.BlogTime</span>
-        <span>@Model.BlogAuthor</span>
-        <a href="/Blog/Delete?id=@Model.Id">删除</a>
-        <a asp-action="List">返回</a>
-    </div>
-    <p>@Model.Body</p>
+        <p>
+           发布时间：@Model.BlogTime 
+            <span class="text-info">|     作者：@Model.BlogAuthor</span>   
+            <span class="pull-right">
+                <a href="/Blog/Delete?id=@Model.Id" class="btn-default">删除</a>
+                <a asp-action="List" class="btn-default">返回</a>
+            </span>
+        </p>
 
-    <h3>Comment</h3>
+
+    </div>
+
+    <p class="text-capitalize">@Model.Body</p>
+    <hr />
+
+    <h4>Comment</h4>
     @if (Model.Posts != null)
     {
         @foreach (var item in Model.Posts)
         {
+
+            <p>@item.CreatedTime <span class="text-info">@item.Poster.UserName</span></p>
+
             <p>@item.Body</p>
-            <p>@item.CreatedTime</p>
-            <p>@item.Poster.UserName</p>
             <hr />
         }
     }
-    <h3>Keywords</h3>
+    <h5>Keywords</h5>
     @if (Model.Posts != null)
     {
         @foreach (var item in Model.Keywords)
         {
-            <p>@item.KeyWord.KeywordContent</p>
+            <a href="#" class="text-info">@item.KeyWord.KeywordContent</a>
 
             <hr />
         }
@@ -58,6 +67,12 @@
         <br />
         <button type="submit">提交</button>
     }
+
+
+
+
+
+
 
 </body>
 </html>

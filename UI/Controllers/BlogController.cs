@@ -91,6 +91,8 @@ namespace UI.Controllers
             return View();
         }
 
+  
+
         [HttpPost]
         [ServiceFilter(typeof(Filter.NeedLogOnAttribute))]
         public IActionResult Single(SingleModel model)

@@ -48,7 +48,7 @@ namespace UI.Controllers
                 }
                 else
                 {
-                   
+
                     userService.Register(model.Username, model.Password);
                 }
             }
@@ -110,7 +110,19 @@ namespace UI.Controllers
 
                 return View();
             }
+        }
 
-        }      
+        public IActionResult IsRepeated(string Username)
+        {
+            return Json(userService.HasExisted(Username) != null);
+        }
+        public IActionResult ConfirmPassword(string Password, string PasswordConfirm)
+        {
+            if (Password != null & PasswordConfirm != null)
+            {
+                return Json(Password==PasswordConfirm);
+            }
+            return Json(true);
+        }
     }
 }

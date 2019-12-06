@@ -23,5 +23,8 @@ namespace UI.Models.Blogs
         //public string CommentAuthor { get; set; }
         //public DateTime CommentTime { get; set; }
 
+
+
+
     }
 }

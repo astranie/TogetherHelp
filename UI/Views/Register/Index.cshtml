@@ -19,21 +19,25 @@
             </label><br />
             @Html.TextBoxFor(m => m.Username)<br />
             <span>@Html.ValidationMessageFor(m => m.Username)</span>
+            <br />
             <label>
                 密码：
             </label><br />
             @Html.TextBoxFor(m => m.Password)<br />
             <span>@Html.ValidationMessageFor(m => m.Password)</span>
+            <br />
             <label>
                 确认密码：
             </label><br />
             @Html.TextBoxFor(m => m.PasswordConfirm)<br />
             <span>@Html.ValidationMessageFor(m => m.PasswordConfirm)</span>
+            <br />
             <label>
                 验证码：
             </label><br />
             @Html.TextBoxFor(m => m.Captcha)<br /><img src="/Captcha/Get" />
             <a href="#">看不清楚</a>
+            <br />
             <span>@Html.ValidationMessageFor(m => m.Captcha)</span>
 
 
