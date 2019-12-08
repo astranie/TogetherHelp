@@ -14,6 +14,8 @@ namespace BLL.Repository
         private KeyWord keyword;
         private KeywordAndBlog k2b;
         private Message message;
+        private BlogsAndGooders bg;
+
         public BlogRepository(DbContext context, UserRepository repository) : base(context)
         {
             blog = new Blog();
@@ -21,6 +23,7 @@ namespace BLL.Repository
             keyword = new KeyWord();
             k2b = new KeywordAndBlog();
             message = new Message();
+            bg = new BlogsAndGooders();
             userRepository = repository;
         }
 
@@ -70,18 +73,59 @@ namespace BLL.Repository
 
             return entities.Include(b => b.Author).
                 Include(b => b.Posts).
-                ThenInclude(p=>p.Poster).
+                ThenInclude(p => p.Poster).
+
+                Include(b => b.Gooders).
 
 
                 Include(b => b.Keywords).
                 ThenInclude(k => k.KeyWord).
+                  Where(b => b.Id == id);
 
 
 
-                Where(b => b.Id == id);
+
         }
 
+        public int Dianzan(string blogid, string userid)
+        {
+            blog = bg.Blog = GetById(Convert.ToInt32(blogid)).SingleOrDefault();
+            if (IsZaned(blogid, userid))
+            {
+                return blog.GetGood;
+            }
 
+
+            bg.Blog.GetGood++;
+            bg.Gooder = userRepository.GetById(userid);
+
+            blog.Gooders = blog.Gooders ?? new List<BlogsAndGooders>();
+            userRepository.GetById(userid).GoodBlogs = userRepository.GetById(userid).GoodBlogs ?? new List<BlogsAndGooders>();
+
+            blog.Gooders.Add(bg);
+            userRepository.GetById(userid).GoodBlogs.Add(bg);
+
+
+            Update();
+
+            return blog.GetGood;
+
+        }
+
+        public bool IsZaned(string blogid, string userid)
+        {
+            int blog = Convert.ToInt32(blogid);
+            int user = Convert.ToInt32(userid);
+
+            if (userRepository.GetById(userid).GoodBlogs != null)
+            {
+                if (userRepository.GetById(userid).GoodBlogs.Where(b => b.BlogId == blog).SingleOrDefault() != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public Blog Publish(string title, string body, int authorId)
         {
@@ -133,7 +177,7 @@ namespace BLL.Repository
 
         }
 
-       
+
         public KeyWord AddKeyword(string content, Blog blog)
         {
 
@@ -157,7 +201,7 @@ namespace BLL.Repository
             return keyword;
         }
 
-      
+
 
     }
 }

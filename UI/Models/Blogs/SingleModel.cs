@@ -18,6 +18,7 @@ namespace UI.Models.Blogs
         public IList<Post> Posts { get; set; }
         public IList<KeywordAndBlog> Keywords { get; set; }
 
+        public int Zan { get; set; }
 
         //public string CommentBody { get; set; }
         //public string CommentAuthor { get; set; }

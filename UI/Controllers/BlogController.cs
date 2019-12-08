@@ -31,7 +31,7 @@ namespace UI.Controllers
             string user = HttpContext.Session.GetString(DUsername);
             if (string.IsNullOrEmpty(user))
             {
-
+                return null;
             }
             LogViewModel model = JsonConvert.DeserializeObject<LogViewModel>(user);
             return model;
@@ -89,6 +89,16 @@ namespace UI.Controllers
                 model.Posts = blogService.GetById(id).Posts;
                 model.Keywords = blogService.GetById(id).Keywords;
 
+                //前台得不到当前登录用户   todo
+
+                if (CurrentUser()==null)
+                {
+
+                }
+                else
+                {
+                    model.CurrentUserId = CurrentUser().CurrentUserId;
+                }
 
                 return View(model);
             }
@@ -128,15 +138,17 @@ namespace UI.Controllers
         }
 
         //ajax异步加载
+        [HttpPost]
         public IActionResult Posts(string id)
         {
-            Thread.Sleep(200);
-
+      
             PostsModel model = new PostsModel();
             model.Posts = blogService.GetById(id).Posts;
             return PartialView("PostsPartialView",model);
         }
         
+
+
         [ServiceFilter(typeof(Filter.NeedLogOnAttribute))]
         public IActionResult Delete()
         {
@@ -275,7 +287,23 @@ namespace UI.Controllers
             return Redirect("/Blog/List?page=" + page);
         }
 
+        [HttpPost]
+        [ServiceFilter(typeof(Filter.NeedLogOnAttribute))]
+        public IActionResult Good(string id,string userid)
+        {
 
+            
+            int count = blogService.Dianzan(id, userid);
+            return Json(count);
+
+        }
+
+        [HttpPost]
+        public JsonResult CountOfGood(string id)
+        {
+            int count = blogService.GetById(id).GetGood;
+            return Json(count);
+        }
 
 
 

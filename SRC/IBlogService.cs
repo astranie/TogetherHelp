@@ -23,5 +23,6 @@ namespace SRC
         void SendMessage(Blog blog, User sender);
 
         int GetNumber();
+        int Dianzan(string blogid,string userid);
     }
 }

@@ -4,14 +4,16 @@ using BLL.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BLL.Migrations
 {
     [DbContext(typeof(SqlContext))]
-    partial class SqlContextModelSnapshot : ModelSnapshot
+    [Migration("20191207114728_zan")]
+    partial class zan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,9 +33,7 @@ namespace BLL.Migrations
 
                     b.Property<DateTime>("CreatedTime");
 
-                    b.Property<int>("GetGood")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(0);
+                    b.Property<int?>("GetGood");
 
                     b.Property<string>("Title");
 
@@ -42,19 +42,6 @@ namespace BLL.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Blogs");
-                });
-
-            modelBuilder.Entity("BLL.BlogsAndGooders", b =>
-                {
-                    b.Property<int>("GooderId");
-
-                    b.Property<int>("BlogId");
-
-                    b.HasKey("GooderId", "BlogId");
-
-                    b.HasIndex("BlogId");
-
-                    b.ToTable("BlogsAndGooders");
                 });
 
             modelBuilder.Entity("BLL.Email", b =>
@@ -197,21 +184,8 @@ namespace BLL.Migrations
             modelBuilder.Entity("BLL.Blog", b =>
                 {
                     b.HasOne("BLL.User", "Author")
-                        .WithMany()
+                        .WithMany("GoodBlog")
                         .HasForeignKey("AuthorId");
-                });
-
-            modelBuilder.Entity("BLL.BlogsAndGooders", b =>
-                {
-                    b.HasOne("BLL.Blog", "Blog")
-                        .WithMany("Gooders")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BLL.User", "Gooder")
-                        .WithMany("GoodBlogs")
-                        .HasForeignKey("GooderId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BLL.KeywordAndBlog", b =>

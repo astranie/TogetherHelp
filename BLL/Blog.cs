@@ -10,7 +10,8 @@ namespace BLL
         public string Body { get; set; }
         public User Author { get; set; }
 
-       
+        public IList<BlogsAndGooders> Gooders { get; set; }
+
         public IList<Post> Posts { get; set; }
         public IList<KeywordAndBlog> Keywords { get; set; }
 
@@ -18,7 +19,7 @@ namespace BLL
 
 
 
-
+        public int GetGood { get; set; }
 
 
 

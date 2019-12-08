@@ -3,9 +3,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-
     <title>@Model.Title</title>
+    <script>
+        //load方法
+        //$('#comments').load("/Blog/Posts?id=Model.Id")
+        //get方法
+        //获取评论
+
+        //$(document).ready(function () { $('#btn-post').click(post) })
+
+
+
+        $.post('/Blog/Posts?id=@Model.Id', function (data) {
+            $('#comments').html(data)
+        })
+
+
+
+
+        $.post("/Blog/CountOfGood?id=@Model.Id", function (data) {
+            $('#zanCount').html(data)
+        })
+
+
+        //var dianzan = $.post('/Blog/Good?id=@Model.Id&userid=@Model.CurrentUserId', function (data) { '#zanCount'.html(data) }
+        //提交评论 这样评论添加了 但是页面没有显示
+
+
+        $(document).ready(function () {
+            $('#btn-post').click(function () {
+                $.post('/Blog/Single?id=@Model.Id', $('#postform').serialize(), function () { alert('评论成功') })
+            })
+        })
+
+        @*$(document).ready(function () {
+            function ()  { $.post('/Blog/Good?id=@Model.Id&userid=@Model.CurrentUserId', function (data) { '#zanCount'.html(data) }}
+        })*@
+
+        $(document).ready(function () {
+            $('#blog-good-btn').click(function () {
+                $.post('/Blog/Good?id=@Model.Id&userid=@Model.CurrentUserId', function () {
+                       $.post("/Blog/CountOfGood?id=@Model.Id", function (data) {
+            $('#zanCount').html(data)
+        });
+            })
+
+            })
+        })
+
+
+        //$.post("/Blog/Single?id=Model.Id", $ ("postform").serialize);//光这样写 就算不点击提交  form表单也提交至后台了
+
+
+
+    </script>
+
 </head>
 <body>
 
@@ -19,34 +71,42 @@
                 <a asp-action="List" class="btn-default">返回</a>
             </span>
         </p>
-
-
     </div>
 
-    <p class="text-capitalize">@Model.Body</p>
-    <hr />
+    <div style="padding-top:25px;border:2px,dashed,black">
+        <p>@Model.Body</p>
+
+
+        <button type="button" id="blog-good-btn" class="btn-link" style="width:60px">赞(<p id="zanCount"></p>)</button>
+
+        <hr />
+    </div>
+
 
     <h4>Comment</h4>
 
+    <div id="comments"> </div>
+
+    <!-- #region 同步取Post -->
     @*@if (Model.Posts != null)
-    {
-        @foreach (var item in Model.Posts)
         {
+                @foreach (var item in Model.Posts)
+                {
 
-            <p>@item.CreatedTime <span class="text-info">@item.Poster.UserName</span></p>
+                    <p>@item.CreatedTime <span class="text-info">@item.Poster.UserName</span></p>
 
-            <p>@item.Body</p>
-            <hr />
-        }
-    }*@
+                    <p>@item.Body</p>
+                    <hr />
+                }
+            }*@
+    <!-- #endregion -->
+
     <hr />
 
-    <div id="comments">
 
-    </div>
 
     <h5>Keywords</h5>
-    @if (Model.Posts != null)
+    @if (Model.Keywords != null)
     {
         @foreach (var item in Model.Keywords)
         {
@@ -56,8 +116,8 @@
         }
     }
 
-
-    @using (Html.BeginForm(FormMethod.Post,new { id="postform"}))
+    @* 异步提交评论，交给服务器处理，返回新的评论列表 *@
+    @using (Html.BeginForm(FormMethod.Post, new { id = "postform" }))
     {
         <label>发表评论</label>
         <br />
@@ -67,27 +127,7 @@
     }
 
 
-    <script>
-        //load方法
-        //$('#comments').load("/Blog/Posts?id=@Model.Id")
-        //get方法
-        $.get("/Blog/Posts?id=@Model.Id", function (data) {
-            $('#comments').html(data);
-        });
 
-        $(document).ready(function () {
-            $('#btn-post').click(function () {
-                $.post('/Blog/Single?id=@Model.Id', $('#postform').serialize())
-            })
-        })
-
-     
-        //$.post("/Blog/Single?id=@Model.Id", $ ("postform").serialize);//光这样写 就算不点击提交  form表单也提交至后台了
-
-      
-        
-
-    </script>
 
 
 

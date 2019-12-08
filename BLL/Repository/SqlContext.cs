@@ -51,6 +51,7 @@ Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubn
             modelBuilder.Entity<Blog>().HasMany(b => b.Posts).
                 WithOne(p => p.Blog).
                 OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Blog>().Property(b => b.GetGood).HasDefaultValue(0);
 
             //关于Message和User的配置 
             modelBuilder.Entity<Message>().HasOne(m => m.Receiver).WithMany(r => r.ReceivedMessages).
@@ -81,6 +82,12 @@ Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubn
                 HasOne(b2k => b2k.KeyWord).
                 WithMany(k => k.Blogs).
                 HasForeignKey(b2k => b2k.KeywordId);
+
+
+            modelBuilder.Entity<BlogsAndGooders>().HasKey(bandg => new { bandg.GooderId, bandg.BlogId });
+
+            modelBuilder.Entity<BlogsAndGooders>().HasOne(bg => bg.Blog).WithMany(b => b.Gooders).HasForeignKey(bg => bg.BlogId);
+            modelBuilder.Entity<BlogsAndGooders>().HasOne(bg => bg.Gooder).WithMany(g => g.GoodBlogs).HasForeignKey(bg => bg.GooderId);
 
         }
 

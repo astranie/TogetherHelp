@@ -20,6 +20,8 @@ namespace BLL
 
         public IList<Message> SendedMessages { get; set; }
         public IList<Message> ReceivedMessages { get; set; }
+        public IList<BlogsAndGooders> GoodBlogs { get; set; }
+
 
     }
 }

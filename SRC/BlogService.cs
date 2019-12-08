@@ -80,5 +80,10 @@ namespace SRC
         {
             return blogRepository.GetNumber();
         }
+
+        public int Dianzan(string blogid, string userid)
+        {
+            return blogRepository.Dianzan(blogid,userid);
+        }
     }  
 }

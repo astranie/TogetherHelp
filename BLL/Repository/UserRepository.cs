@@ -43,6 +43,7 @@ namespace BLL.Repository
             return entities.
                 Where(u => u.Id == Convert.ToInt32(id)).
                 Include(u=>u.ReceivedMessages).
+                Include(u=>u.GoodBlogs).
                 SingleOrDefault()
                 ;
         }
